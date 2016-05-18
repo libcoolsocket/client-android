@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="basicColor">#004F69</color>
+	<color name="colorPrimary">@color/basicColor</color>
+	<color name="colorPrimaryDark">@color/basicColor</color>
+	<color name="windowBackground">@color/basicColor</color>
+	<color name="colorAccent">#E5E5E5</color>
+	<color name="actionModeBackground">#025B6E</color>
+	<color name="navigationColor">#000000</color>
+	<color name="itemBackground">#2E5761</color>
+	<color name="selectorColor">#00475D</color>
+	<color name="pressedColor">@color/itemBackground</color>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:paddingLeft="15dp" android:paddingRight="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <LinearLayout 
+		android:id="@+id/mainLinearLayout"
+		android:padding="2dp" 
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true">
+		
+        <EditText 
+			android:gravity="center" 
+			android:id="@+id/mainServer" 
+			android:layout_width="0dp" 
+			android:layout_height="wrap_content" 
+			android:text="0.0.0.0" 
+			android:hint="server" 
+			android:singleLine="true" 
+			android:layout_weight="34.0" 
+			android:inputType="textNoSuggestions|textShortMessage"
+		/>
+	
+        <EditText 
+			android:gravity="center" 
+			android:id="@+id/mainPort"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content" 
+			android:text="3000"
+			android:hint="port"
+			android:singleLine="true" 
+			android:layout_weight="14.0"
+			android:inputType="number" 
+		/>
+	
+        <EditText 
+			android:id="@+id/mainEditText"
+			android:layout_width="0dp" 
+			android:layout_height="wrap_content" 
+			android:hint="Enter text..." 
+			android:layout_weight="31.0" 
+			android:inputType="textMultiLine"
+		/>
+	
+        <Button 
+			android:id="@+id/mainButton"
+			android:background="@drawable/borderless_layout"
+			android:visibility="gone"
+			android:layout_width="0dp"
+			android:layout_height="30dp"
+			android:text="OK"
+			android:layout_weight="5.0" 
+		/>
+	
+    </LinearLayout>
+	
+    <View
+		android:id="@+id/seperator"
+		android:background="@color/colorAccent"
+		android:layout_width="wrap_content"
+		android:layout_height="2dp"
+		android:layout_above="@+id/mainLinearLayout" 
+	/>
+		
+    <ListView 
+		android:id="@+id/mainListView" 
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:divider="@color/colorPrimaryDark" 
+		android:layout_above="@+id/seperator" 
+		android:layout_alignParentTop="true" 
+	/>
+</RelativeLayout>
