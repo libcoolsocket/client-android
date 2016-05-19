@@ -485,12 +485,13 @@ public class MessengerFragment extends Fragment
 		{
             try
 			{
-                if (this.mPendingJson.has("TEMPLATE_LIST"))
+                if (this.mPendingJson.has("template_list"))
 				{
-                    JSONArray jsonArray = this.mPendingJson.getJSONArray("TEMPLATE_LIST");
+                    JSONArray jsonArray = this.mPendingJson.getJSONArray("template_list");
 					TemplateListDatabase templateListDatabase = new TemplateListDatabase(getActivity());
 
 					int added = 0;
+					
                     for (int i = 0; i < jsonArray.length(); i++)
 					{
                         if (templateListDatabase.add(jsonArray.getString(i)))
