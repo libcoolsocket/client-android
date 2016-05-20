@@ -644,6 +644,7 @@ public class MessengerFragment extends Fragment
 
     public void updateJsonMenu()
 	{
-        this.mJsonMenu.setTitle(this.mPendingJson.length() + " JSON");
+		if (this.mJsonMenu != null)
+        	this.mJsonMenu.setTitle(this.mPendingJson.length() + " JSON");
     }
 }
