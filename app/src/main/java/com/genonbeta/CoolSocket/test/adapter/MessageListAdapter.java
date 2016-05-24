@@ -1,14 +1,12 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-import com.genonbeta.CoolSocket.test.R;
-import com.genonbeta.CoolSocket.test.helper.MessageItem;
-import java.util.ArrayList;
+import android.content.*;
+import android.graphics.*;
+import android.view.*;
+import android.widget.*;
+import com.genonbeta.CoolSocket.test.*;
+import com.genonbeta.CoolSocket.test.helper.*;
+import java.util.*;
 
 public class MessageListAdapter extends BaseAdapter
 {
@@ -47,18 +45,17 @@ public class MessageListAdapter extends BaseAdapter
 
     public View getViewAt(View view, int i)
 	{
-        TextView textView = (TextView) view.findViewById(R.id.list_text);
+        TextView textView1 = (TextView) view.findViewById(R.id.list_text);
         TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
         MessageItem messageItem = (MessageItem) getItem(i);
 		
-        if (!messageItem.isReceived)
-            view.setActivated(true);
+		String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
+        
+		textView1.setTextColor((messageItem.isReceived) ? Color.GREEN : Color.CYAN);
 		
-        String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
-		
-        textView.setText(str + "> ");
+		textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
         textView2.setText(messageItem.message);
-		
+	
         return view;
     }
 }

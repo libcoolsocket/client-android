@@ -5,9 +5,9 @@
 	<color name="colorPrimaryDark">@color/basicColor</color>
 	<color name="windowBackground">@color/basicColor</color>
 	<color name="colorAccent">#E5E5E5</color>
-	<color name="actionModeBackground">#025B6E</color>
+	<color name="actionModeBackground">@color/basicColor</color>
 	<color name="navigationColor">#000000</color>
-	<color name="itemBackground">#2E5761</color>
-	<color name="selectorColor">#00475D</color>
+	<color name="itemBackground">#0C737F</color>
+	<color name="selectorColor">@color/itemBackground</color>
 	<color name="pressedColor">@color/itemBackground</color>
 </resources>
