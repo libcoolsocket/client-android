@@ -12,11 +12,17 @@ public class MessageListAdapter extends BaseAdapter
 {
     private Context mContext;
     private ArrayList<MessageItem> mList;
+	
+	private int receivedColor = 0;
+	private int sentColor = 0;
 
     public MessageListAdapter(Context context, ArrayList<MessageItem> arrayList)
 	{
         this.mContext = context;
         this.mList = arrayList;
+		
+		this.receivedColor = context.getResources().getColor(R.color.receivedMessage);
+		this.sentColor = context.getResources().getColor(R.color.sentMessage);
     }
 
     @Override
@@ -51,7 +57,7 @@ public class MessageListAdapter extends BaseAdapter
 		
 		String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
         
-		textView1.setTextColor((messageItem.isReceived) ? Color.GREEN : Color.CYAN);
+		textView1.setTextColor((messageItem.isReceived) ? this.receivedColor : this.sentColor);
 		
 		textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
         textView2.setText(messageItem.message);

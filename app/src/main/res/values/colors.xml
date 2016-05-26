@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="basicColor">#004F69</color>
-	<color name="colorPrimary">@color/basicColor</color>
-	<color name="colorPrimaryDark">@color/basicColor</color>
+	<color name="basicColor">#4F4F4F</color>
+	<color name="colorPrimary">#454545</color>
+	<color name="colorPrimaryDark">@color/colorPrimary</color>
 	<color name="windowBackground">@color/basicColor</color>
 	<color name="colorAccent">#F3F3F3</color>
 	<color name="actionModeBackground">@color/basicColor</color>
 	<color name="navigationColor">#000000</color>
-	<color name="itemBackground">#0C737F</color>
+	<color name="itemBackground">#878787</color>
 	<color name="selectorColor">@color/itemBackground</color>
 	<color name="pressedColor">@color/itemBackground</color>
+	<color name="receivedMessage">#003000</color>
+	<color name="sentMessage">#300000</color>
 </resources>
