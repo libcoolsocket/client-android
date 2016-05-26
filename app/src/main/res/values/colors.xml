@@ -4,7 +4,7 @@
 	<color name="colorPrimary">@color/basicColor</color>
 	<color name="colorPrimaryDark">@color/basicColor</color>
 	<color name="windowBackground">@color/basicColor</color>
-	<color name="colorAccent">#E5E5E5</color>
+	<color name="colorAccent">#F3F3F3</color>
 	<color name="actionModeBackground">@color/basicColor</color>
 	<color name="navigationColor">#000000</color>
 	<color name="itemBackground">#0C737F</color>
