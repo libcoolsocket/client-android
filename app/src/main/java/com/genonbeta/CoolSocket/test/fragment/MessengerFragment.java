@@ -189,7 +189,7 @@ public class MessengerFragment extends Fragment
         this.setMessageBox(this.mPreferences.getString("lastMessage", ""), false);
         this.setPortText(this.mPreferences.getInt("lastPort", 3000));
         this.setMode(this.mPreferences.getBoolean("lastSelectedMode", false));
-
+		
         try
 		{
             this.mPendingJson = new JSONObject(this.mPreferences.getString("lastJsonIndex", "{}"));;
