@@ -57,6 +57,14 @@ public class MessageListAdapter extends BaseAdapter
 		
 		String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
         
+		if (PairListHelper.getList().containsKey(messageItem.client))
+		{
+			PairListHelper.DeviceInfo device = PairListHelper.getList().get(messageItem.client);
+			
+			if (device.deviceName != null)
+				str += " @ " + device.deviceName;
+		}
+		
 		textView1.setTextColor((messageItem.isReceived) ? this.receivedColor : this.sentColor);
 		
 		textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
