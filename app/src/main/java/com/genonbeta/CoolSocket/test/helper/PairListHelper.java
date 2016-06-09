@@ -1,10 +1,18 @@
 package com.genonbeta.CoolSocket.test.helper;
 
 import android.support.v4.util.ArrayMap;
+
+import com.genonbeta.CoolSocket.CoolCommunication;
+import com.genonbeta.CoolSocket.CoolJsonCommunication;
 import com.genonbeta.core.util.NetworkDeviceScanner;
 import com.genonbeta.core.util.NetworkDeviceScanner.ScannerHandler;
 import com.genonbeta.core.util.NetworkUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import com.genonbeta.CoolSocket.*;
 import org.json.*;

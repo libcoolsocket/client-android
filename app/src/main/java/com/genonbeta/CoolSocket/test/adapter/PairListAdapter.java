@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper.DeviceInfo;

@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.genonbeta.CoolSocket.test.helper.MessageItem;
+
 import java.util.ArrayList;
 
 public class OldBadgeDatabase extends SQLiteOpenHelper

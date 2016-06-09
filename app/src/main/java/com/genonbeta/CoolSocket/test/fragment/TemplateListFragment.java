@@ -1,27 +1,25 @@
 package com.genonbeta.CoolSocket.test.fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
 import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.adapter.TemplateListAdapter;
 import com.genonbeta.CoolSocket.test.dialog.EditTemplateDialog;
 import com.genonbeta.CoolSocket.test.dialog.NewTemplateDialog;
+
 import java.util.HashSet;
-import android.widget.*;
-import android.util.*;
-import android.app.*;
 
 public class TemplateListFragment extends ListFragment
 {

@@ -1,12 +1,17 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
-import com.genonbeta.CoolSocket.test.*;
-import com.genonbeta.CoolSocket.test.helper.*;
-import java.util.*;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.helper.MessageItem;
+import com.genonbeta.CoolSocket.test.helper.PairListHelper;
+
+import java.util.ArrayList;
 
 public class MessageListAdapter extends BaseAdapter
 {

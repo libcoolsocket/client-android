@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 

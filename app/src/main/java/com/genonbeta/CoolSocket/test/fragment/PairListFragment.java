@@ -9,15 +9,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.Toast;
+
 import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.adapter.PairListAdapter;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
 import com.genonbeta.core.content.Intent;
-import android.widget.*;
-import javax.xml.transform.*;
 
 public class PairListFragment extends ListFragment
 {

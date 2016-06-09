@@ -8,8 +8,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -26,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.genonbeta.CoolSocket.CoolCommunication;
 import com.genonbeta.CoolSocket.CoolCommunication.Messenger;
 import com.genonbeta.CoolSocket.CoolCommunication.Messenger.Process;
@@ -37,13 +36,15 @@ import com.genonbeta.CoolSocket.test.database.OldBadgeDatabase;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 import com.genonbeta.CoolSocket.test.dialog.JsonEditorDialog;
 import com.genonbeta.CoolSocket.test.helper.MessageItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MessengerFragment extends Fragment
 {
