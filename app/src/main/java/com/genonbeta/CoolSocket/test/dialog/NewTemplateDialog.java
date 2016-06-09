@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 

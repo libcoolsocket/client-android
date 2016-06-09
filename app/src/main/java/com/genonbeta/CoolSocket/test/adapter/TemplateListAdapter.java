@@ -6,10 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
+
 import java.util.ArrayList;
-import android.util.*;
 
 public class TemplateListAdapter extends BaseAdapter
 {

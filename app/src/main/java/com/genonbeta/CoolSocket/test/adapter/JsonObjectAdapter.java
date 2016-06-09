@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.genonbeta.CoolSocket.test.R;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class JsonObjectAdapter extends BaseAdapter
 {

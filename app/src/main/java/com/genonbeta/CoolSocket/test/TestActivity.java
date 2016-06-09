@@ -1,7 +1,7 @@
 package com.genonbeta.CoolSocket.test;
 
-import android.support.v7.app.*;
-import android.os.*;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class TestActivity extends AppCompatActivity
 {

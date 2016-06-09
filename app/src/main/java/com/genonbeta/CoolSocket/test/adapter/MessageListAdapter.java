@@ -1,12 +1,17 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
-import com.genonbeta.CoolSocket.test.*;
-import com.genonbeta.CoolSocket.test.helper.*;
-import java.util.*;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.helper.MessageItem;
+import com.genonbeta.CoolSocket.test.helper.PairListHelper;
+
+import java.util.ArrayList;
 
 public class MessageListAdapter extends BaseAdapter
 {
@@ -57,6 +62,14 @@ public class MessageListAdapter extends BaseAdapter
 		
 		String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
         
+		if (PairListHelper.getList().containsKey(messageItem.client))
+		{
+			PairListHelper.DeviceInfo device = PairListHelper.getList().get(messageItem.client);
+			
+			if (device.deviceName != null)
+				str += " @ " + device.deviceName;
+		}
+		
 		textView1.setTextColor((messageItem.isReceived) ? this.receivedColor : this.sentColor);
 		
 		textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
