@@ -23,7 +23,7 @@
 		android:layout_height="match_parent" 
 		android:layout_marginLeft="5dp"
 		android:layout_marginRight="5dp"
-		android:layout_weight="0.5"
+		android:layout_weight="0.40"
 	/>
 
 	<fragment 
