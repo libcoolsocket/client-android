@@ -14,6 +14,10 @@ import org.json.JSONObject;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import com.genonbeta.CoolSocket.*;
+import org.json.*;
+import java.net.*;
+import com.genonbeta.CoolSocket.CoolCommunication.Messenger.*;
 
 public class PairListHelper
 {
