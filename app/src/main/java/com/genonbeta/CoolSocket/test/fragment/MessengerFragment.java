@@ -371,7 +371,22 @@ public class MessengerFragment extends Fragment
                 }
             };
 
-            JsonEditorDialog jsonEditorDialog = new JsonEditorDialog(this.getActivity(), this.mPendingJson, removeListener, listItemSelected);
+            JsonEditorDialog.ThirdOption thirdOption = new JsonEditorDialog.ThirdOption()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    toggleMode();
+                }
+
+                @Override
+                public String getButtonName()
+                {
+                    return (mJsonEnabled) ? "Text Mode" : "JSON Mode";
+                }
+            };
+
+            JsonEditorDialog jsonEditorDialog = new JsonEditorDialog(this.getActivity(), this.mPendingJson, removeListener, listItemSelected, thirdOption);
 
             jsonEditorDialog.show();
         }

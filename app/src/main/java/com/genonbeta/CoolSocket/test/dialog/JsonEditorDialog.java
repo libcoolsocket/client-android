@@ -15,7 +15,7 @@ public class JsonEditorDialog extends Builder
     private Context mContext;
     private JSONObject mJson;
     
-    public JsonEditorDialog(Context context, JSONObject jsonObject, final OnEditorClickListener removeListener, final OnEditorClickListener listItemSelected)
+    public JsonEditorDialog(Context context, JSONObject jsonObject, final OnEditorClickListener removeListener, final OnEditorClickListener listItemSelected, final ThirdOption thirdOption)
 	{
         super(context);
 		
@@ -39,6 +39,9 @@ public class JsonEditorDialog extends Builder
 				}
 			);
         }
+
+		if (thirdOption != null)
+			setNeutralButton(thirdOption.getButtonName(), thirdOption);
 		
         setNegativeButton("Close", (OnClickListener) null);
         setPositiveButton("Remove all", new OnClickListener()
@@ -69,5 +72,10 @@ public class JsonEditorDialog extends Builder
 	public static interface OnEditorClickListener
 	{
 		public void onJsonClick(JsonEditorDialog editor, DialogInterface dialog, int position);
+	}
+
+	public abstract static class ThirdOption implements OnClickListener
+	{
+		public abstract String getButtonName();
 	}
 }
