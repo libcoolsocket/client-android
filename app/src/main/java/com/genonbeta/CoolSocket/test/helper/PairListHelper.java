@@ -14,9 +14,13 @@ import org.json.JSONObject;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+
 import com.genonbeta.CoolSocket.*;
+
 import org.json.*;
+
 import java.net.*;
+
 import com.genonbeta.CoolSocket.CoolCommunication.Messenger.*;
 
 public class PairListHelper
@@ -25,12 +29,12 @@ public class PairListHelper
     private static NetworkDeviceScanner mScanner = new NetworkDeviceScanner();
 
     public static class ResultHandler implements ScannerHandler
-	{
+    {
         @Override
         public void onDeviceFound(InetAddress inetAddress)
-		{
+        {
             if (!PairListHelper.mIndex.containsKey(inetAddress.getHostAddress()))
-			{
+            {
                 String hostAddress = inetAddress.getHostAddress();
 
                 DeviceInfo deviceInfo = new DeviceInfo();
@@ -40,9 +44,9 @@ public class PairListHelper
 
         @Override
         public void onThreadsCompleted()
-		{
+        {
             for (String str : PairListHelper.getList().keySet())
-			{
+            {
                 final DeviceInfo deviceInfo = PairListHelper.getList().get(str);
 
                 deviceInfo.isTested = true;
@@ -50,65 +54,67 @@ public class PairListHelper
                 deviceInfo.coolSocket = NetworkUtils.testSocket(str, 3000);
                 deviceInfo.deviceController = NetworkUtils.testSocket(str, 4632);
 
-				if (deviceInfo.deviceController)
-					CoolJsonCommunication.Messenger.sendOnCurrentThread(str, 4632, null, new CoolJsonCommunication.JsonResponseHandler()
-						{
-							@Override
-							public void onJsonMessage(Socket socket, CoolCommunication.Messenger.Process process, JSONObject json)
-							{
-								try
-								{
-									json.put("printDeviceName", true);
-									
-									JSONObject response = new JSONObject(process.waitForResponse());
-									
-									if (response.has("deviceName"))
-										deviceInfo.deviceName = response.getString("deviceName");
-								}
-								catch (JSONException e)
-								{}
-							}
-						}
-					);
+                if (deviceInfo.deviceController)
+                    CoolJsonCommunication.Messenger.sendOnCurrentThread(str, 4632, null, new CoolJsonCommunication.JsonResponseHandler()
+                            {
+                                @Override
+                                public void onJsonMessage(Socket socket, CoolCommunication.Messenger.Process process, JSONObject json)
+                                {
+                                    try
+                                    {
+                                        json.put("printDeviceName", true);
 
+                                        JSONObject response = new JSONObject(process.waitForResponse());
+
+                                        if (response.has("deviceName"))
+                                            deviceInfo.deviceName = response.getString("deviceName");
+                                    } catch (JSONException e)
+                                    {
+                                    }
+                                }
+                            }
+                    );
             }
         }
     }
 
     public static class DeviceInfo
-	{
+    {
         public boolean coolSocket = false;
         public boolean deviceController = false;
         public boolean isTested = false;
         public boolean trebleShot = false;
-		public String deviceName = null;
-	}
+        public String deviceName = null;
+    }
 
     public static ArrayMap<String, DeviceInfo> getList()
-	{
+    {
         return mIndex;
     }
 
     public static NetworkDeviceScanner getScanner()
-	{
+    {
         return mScanner;
     }
 
     public static boolean update(ResultHandler resultHandler)
-	{
+    {
         if (!mScanner.isScannerAvaiable())
             return false;
 
-        mIndex.clear();
+        ArrayList<String> interfacesWithOnlyIp = NetworkUtils.getInterfacesWithOnlyIp(true, new String[]{"rmnet"});
 
-        ArrayList<String> interfacesWithOnlyIp = NetworkUtils.getInterfacesWithOnlyIp(true, new String[] {"rmnet"});
+        synchronized (mIndex)
+        {
+            mIndex.clear();
 
-        for (String str : interfacesWithOnlyIp)
-		{
-            if (!mIndex.containsKey(str))
-			{
-                DeviceInfo deviceInfo = new DeviceInfo();
-                mIndex.put(str, deviceInfo);
+            for (String str : interfacesWithOnlyIp)
+            {
+                if (!mIndex.containsKey(str))
+                {
+                    DeviceInfo deviceInfo = new DeviceInfo();
+                    mIndex.put(str, deviceInfo);
+                }
             }
         }
 

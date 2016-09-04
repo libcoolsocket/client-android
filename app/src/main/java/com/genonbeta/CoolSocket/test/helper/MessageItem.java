@@ -5,4 +5,5 @@ public class MessageItem
     public String client;
 	public String message;
     public boolean isReceived;
+    public boolean isError;
 }
