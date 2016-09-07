@@ -15,14 +15,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.genonbeta.CoolSocket.*;
-
-import org.json.*;
-
-import java.net.*;
-
-import com.genonbeta.CoolSocket.CoolCommunication.Messenger.*;
-
 public class PairListHelper
 {
     private static ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<String, DeviceInfo>();
@@ -37,25 +29,17 @@ public class PairListHelper
             {
                 String hostAddress = inetAddress.getHostAddress();
 
-                DeviceInfo deviceInfo = new DeviceInfo();
-                mIndex.put(hostAddress, deviceInfo);
-            }
-        }
+                final DeviceInfo deviceInfo = new DeviceInfo();
 
-        @Override
-        public void onThreadsCompleted()
-        {
-            for (String str : PairListHelper.getList().keySet())
-            {
-                final DeviceInfo deviceInfo = PairListHelper.getList().get(str);
+                PairListHelper.getList().put(hostAddress, deviceInfo);
 
                 deviceInfo.isTested = true;
-                deviceInfo.trebleShot = NetworkUtils.testSocket(str, 1128);
-                deviceInfo.coolSocket = NetworkUtils.testSocket(str, 3000);
-                deviceInfo.deviceController = NetworkUtils.testSocket(str, 4632);
+                deviceInfo.trebleShot = NetworkUtils.testSocket(hostAddress, 1128);
+                deviceInfo.coolSocket = NetworkUtils.testSocket(hostAddress, 3000);
+                deviceInfo.deviceController = NetworkUtils.testSocket(hostAddress, 4632);
 
                 if (deviceInfo.deviceController)
-                    CoolJsonCommunication.Messenger.sendOnCurrentThread(str, 4632, null, new CoolJsonCommunication.JsonResponseHandler()
+                    CoolJsonCommunication.Messenger.sendOnCurrentThread(hostAddress, 4632, null, new CoolJsonCommunication.JsonResponseHandler()
                             {
                                 @Override
                                 public void onJsonMessage(Socket socket, CoolCommunication.Messenger.Process process, JSONObject json)
@@ -74,7 +58,13 @@ public class PairListHelper
                                 }
                             }
                     );
+
             }
+        }
+
+        @Override
+        public void onThreadsCompleted()
+        {
         }
     }
 
@@ -89,7 +79,10 @@ public class PairListHelper
 
     public static ArrayMap<String, DeviceInfo> getList()
     {
-        return mIndex;
+        synchronized (mIndex)
+        {
+            return mIndex;
+        }
     }
 
     public static NetworkDeviceScanner getScanner()
@@ -102,22 +95,8 @@ public class PairListHelper
         if (!mScanner.isScannerAvaiable())
             return false;
 
-        ArrayList<String> interfacesWithOnlyIp = NetworkUtils.getInterfacesWithOnlyIp(true, new String[]{"rmnet"});
+        getList().clear();
 
-        synchronized (mIndex)
-        {
-            mIndex.clear();
-
-            for (String str : interfacesWithOnlyIp)
-            {
-                if (!mIndex.containsKey(str))
-                {
-                    DeviceInfo deviceInfo = new DeviceInfo();
-                    mIndex.put(str, deviceInfo);
-                }
-            }
-        }
-
-        return mScanner.scan(interfacesWithOnlyIp, resultHandler);
+        return mScanner.scan(NetworkUtils.getInterfacesWithOnlyIp(true, new String[]{"rmnet"}), resultHandler);
     }
 }

@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -35,7 +37,9 @@ import com.genonbeta.CoolSocket.CoolCommunication.Messenger;
 import com.genonbeta.CoolSocket.CoolCommunication.Messenger.Process;
 import com.genonbeta.CoolSocket.CoolCommunication.Messenger.ResponseHandler;
 import com.genonbeta.CoolSocket.test.HomeActivity;
+import com.genonbeta.CoolSocket.test.PairFinderActivity;
 import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.TemplateListActivity;
 import com.genonbeta.CoolSocket.test.adapter.MessageListAdapter;
 import com.genonbeta.CoolSocket.test.database.OldBadgeDatabase;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
@@ -70,6 +74,7 @@ public class MessengerFragment extends Fragment
     private EditText mEditTextServer;
     private ListView mListView;
     private MenuItem mJsonMenu;
+    private View mSeperator;
     private SharedPreferences mPreferences;
     private JSONObject mPendingJson;
     private boolean mIsMultiscreen = false;
@@ -90,7 +95,7 @@ public class MessengerFragment extends Fragment
         protected void onMessage(Socket socket, String message, PrintWriter printWriter, String clientIp)
         {
             if (message.length() > 0)
-                addMessageUI(clientIp, message, true);
+                addMessageUI(clientIp, message, true, false);
         }
 
         @Override
@@ -130,7 +135,7 @@ public class MessengerFragment extends Fragment
                     String sender = messages[0].getOriginatingAddress();
                     String message = sb.toString();
 
-                    addMessageUI(sender, message, true);
+                    addMessageUI(sender, message, true, false);
                 }
             }
         }
@@ -151,13 +156,14 @@ public class MessengerFragment extends Fragment
         public void onResponseAvaiable(String response)
         {
             if (response != null && !response.equals(""))
-                addMessageUI(mAddress.getHostName(), response, true);
+                addMessageUI(mAddress.getHostName(), response, true, false);
         }
 
         @Override
         public void onError(Exception exception)
         {
             showToast("Someting went wrong while sending your message: (error) " + exception, Toast.LENGTH_SHORT);
+            addMessageUI("Send failed", "@" + exception, false, true);
         }
     }
 
@@ -188,6 +194,7 @@ public class MessengerFragment extends Fragment
         this.mEditTextPort = (EditText) inflate.findViewById(R.id.mainPort);
         this.mButton = (Button) inflate.findViewById(R.id.mainButton);
         this.mListView = (ListView) inflate.findViewById(R.id.mainListView);
+        this.mSeperator = inflate.findViewById(R.id.seperator);
         this.mAdapter = new MessageListAdapter(getActivity(), this.mList);
         this.mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.mBadgeDatabase = new OldBadgeDatabase(getActivity());
@@ -326,23 +333,11 @@ public class MessengerFragment extends Fragment
         }
         else if ("Pair finder".equals(menuItem.getTitle()))
         {
-            try
-            {
-                startActivityForResult(new Intent(getActivity(), Class.forName("com.genonbeta.CoolSocket.test.PairFinderActivity")), REQUEST_CHOOSE_PEER);
-            } catch (Throwable e)
-            {
-                throw new NoClassDefFoundError(e.getMessage());
-            }
+            startActivityForResult(new Intent(getActivity(), PairFinderActivity.class), REQUEST_CHOOSE_PEER);
         }
         else if ("Template list".equals(menuItem.getTitle()))
         {
-            try
-            {
-                startActivityForResult(new Intent(getActivity(), Class.forName("com.genonbeta.CoolSocket.test.TemplateListActivity")), REQUEST_USE_TEMPLATE);
-            } catch (Throwable e)
-            {
-                throw new NoClassDefFoundError(e.getMessage());
-            }
+            startActivityForResult(new Intent(getActivity(), TemplateListActivity.class), REQUEST_USE_TEMPLATE);
         }
         else if ("Clear Msg.".equals(menuItem.getTitle()))
         {
@@ -455,7 +450,7 @@ public class MessengerFragment extends Fragment
         this.mCool.stop();
     }
 
-    public void addMessage(String client, String message, boolean isReceived)
+    public void addMessage(String client, String message, boolean isReceived, boolean isError)
     {
         if (message.length() >= 1)
         {
@@ -464,6 +459,7 @@ public class MessengerFragment extends Fragment
             messageItem.message = message;
             messageItem.client = client;
             messageItem.isReceived = isReceived;
+            messageItem.isError = isError;
 
             this.mList.add(messageItem);
             this.mBadgeDatabase.add(messageItem);
@@ -473,14 +469,14 @@ public class MessengerFragment extends Fragment
         }
     }
 
-    public void addMessageUI(final String client, final String message, final boolean isReceived)
+    public void addMessageUI(final String client, final String message, final boolean isReceived, final boolean isError)
     {
         getActivity().runOnUiThread(new Runnable()
                                     {
                                         @Override
                                         public void run()
                                         {
-                                            addMessage(client, message, isReceived);
+                                            addMessage(client, message, isReceived, isError);
                                         }
                                     }
         );
@@ -488,20 +484,33 @@ public class MessengerFragment extends Fragment
 
     public void changeUtilities(boolean mode)
     {
+        Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+        Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+
         if (mode)
         {
+            this.mEditTextServer.setAnimation(fadeOut);
+            this.mEditTextPort.setAnimation(fadeOut);
+
             this.mEditTextServer.setVisibility(View.GONE);
             this.mEditTextPort.setVisibility(View.GONE);
             this.mButton.setVisibility(View.VISIBLE);
+
+            this.mButton.setAnimation(fadeIn);
 
             this.mEditText.setSingleLine(false);
 
             return;
         }
 
+        this.mButton.setAnimation(fadeOut);
+
         this.mEditTextServer.setVisibility(View.VISIBLE);
         this.mEditTextPort.setVisibility(View.VISIBLE);
         this.mButton.setVisibility(View.GONE);
+
+        this.mEditTextServer.setAnimation(fadeIn);
+        this.mEditTextPort.setAnimation(fadeIn);
 
         this.mEditText.setSingleLine(true);
         this.mEditText.clearFocus();
@@ -647,7 +656,7 @@ public class MessengerFragment extends Fragment
             else
                 Messenger.send(serverAddress, Integer.parseInt(this.mEditTextPort.getText().toString()), message, this.mSenderHandler);
 
-            addMessage(serverAddress, message, false);
+            addMessage(serverAddress, message, false, false);
 
             return true;
         } catch (Exception e)

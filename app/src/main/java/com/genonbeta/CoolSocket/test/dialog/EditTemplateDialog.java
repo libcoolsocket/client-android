@@ -23,32 +23,33 @@ public class EditTemplateDialog extends Builder
     private EditText mText;
 
     public EditTemplateDialog(Context context, TemplateListDatabase templateListDatabase, OnClickListener onClickListener, OnClickListener onClickListener2, String str)
-	{
+    {
         super(context);
-		
-        this.mPositive = new OnClickListener() {
+
+        this.mPositive = new OnClickListener()
+        {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
-			{
+            {
                 Editable text = mText.getText();
-				
+
                 if (!"".equals(text.toString()))
                     mDatabase.edit(mOriginal, text.toString());
-					
+
                 mExtPositive.onClick(dialogInterface, i);
             }
         };
-		
+
         this.mDatabase = templateListDatabase;
         this.mExtPositive = onClickListener;
         this.mExtNegative = onClickListener2;
         this.mOriginal = str;
-		
+
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.layout_new_template, (ViewGroup) null);
         this.mText = (EditText) inflate.findViewById(R.id.layout_new_template_edit_text);
         this.mText.setText(str);
-		
-		setTitle("Edit template");
+
+        setTitle("Edit template");
         setNegativeButton("Cancel", this.mExtNegative);
         setPositiveButton("Save", this.mPositive);
         setView(inflate);

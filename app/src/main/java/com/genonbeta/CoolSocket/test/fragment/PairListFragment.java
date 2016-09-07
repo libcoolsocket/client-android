@@ -19,21 +19,22 @@ import com.genonbeta.core.content.Intent;
 
 public class PairListFragment extends ListFragment
 {
-	private PairListAdapter mAdapter;
-	private boolean mIsMultiscreen = false;
-	private IntentFilter mFilter = new IntentFilter();
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, android.content.Intent intent)
-		{
-			Toast.makeText(PairListFragment.this.getActivity(), "List has been refreshed", Toast.LENGTH_SHORT).show();
-			PairListFragment.this.mAdapter.notifyDataSetChanged();
-		}
-	};
+    private PairListAdapter mAdapter;
+    private boolean mIsMultiscreen = false;
+    private IntentFilter mFilter = new IntentFilter();
+    private BroadcastReceiver mReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, android.content.Intent intent)
+        {
+            Toast.makeText(PairListFragment.this.getActivity(), "List has been refreshed", Toast.LENGTH_SHORT).show();
+            PairListFragment.this.mAdapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle bundle)
-	{
+    {
         super.onActivityCreated(bundle);
 
         this.mAdapter = new PairListAdapter(getActivity());
@@ -44,8 +45,8 @@ public class PairListFragment extends ListFragment
 
         this.setListAdapter(this.mAdapter);
         this.setHasOptionsMenu(true);
-		this.setEmptyText("No pair was found");
-		
+        this.setEmptyText("No pair was found");
+
         this.getListView().setPadding(15, 0, 15, 0);
 
         if (PairListHelper.getScanner().isScannerAvaiable())
@@ -54,25 +55,25 @@ public class PairListFragment extends ListFragment
 
     @Override
     public void onResume()
-	{
+    {
         super.onResume();
         getActivity().registerReceiver(this.mReceiver, this.mFilter);
     }
 
     @Override
     public void onPause()
-	{
+    {
         super.onPause();
         getActivity().unregisterReceiver(this.mReceiver);
     }
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id)
-	{
-		super.onListItemClick(l, v, position, id);
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        super.onListItemClick(l, v, position, id);
 
-		if (this.mIsMultiscreen)
-		{
+        if (this.mIsMultiscreen)
+        {
             getMessengerFragment().setServerText((String) this.mAdapter.getItem(position));
             return;
         }
@@ -82,33 +83,33 @@ public class PairListFragment extends ListFragment
 
         if (getActivity().getParent() != null)
             getActivity().getParent().setResult(getActivity().RESULT_OK, intent);
-		else
+        else
             getActivity().setResult(getActivity().RESULT_OK, intent);
 
         getActivity().finish();
-	}
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
-	{
+    {
         super.onCreateOptionsMenu(menu, menuInflater);
         menu.add(1, 1, 1, "Scan for Peer").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem)
-	{
+    {
         if ("Scan for Peer".equals(menuItem.getTitle()))
-		{
-			this.mAdapter.requestUpdate();
-			return true;
-		}
-		
+        {
+            this.mAdapter.requestUpdate();
+            return true;
+        }
+
         return super.onOptionsItemSelected(menuItem);
     }
 
     private MessengerFragment getMessengerFragment()
-	{
+    {
         return ((HomeActivity) getActivity()).getMessengerFragment();
     }
 }

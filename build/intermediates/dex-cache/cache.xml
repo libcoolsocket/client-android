@@ -40,7 +40,7 @@
         jar="D:\Developer\AppProjects\CoolSocket-Client\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="3012ee66ab32aef284dac243ee1701ecc3de2b8d">
+        sha1="893869871b618fc491ca6089d093f796f9f38ea7">
         <dex dex="D:\Developer\AppProjects\CoolSocket-Client\app\build\intermediates\pre-dexed\debug\instant-run_89209b5f440a456bc53043aa8610628818b77af0.jar" />
     </item>
     <item
@@ -54,7 +54,7 @@
         jar="D:\Developer\AppProjects\CoolSocket-Client\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="49dd4c441c59edb7b42ce4ed99323fed05bc56b7">
+        sha1="3214107fc157bbf23d170cebc0ac40c23478f301">
         <dex dex="D:\Developer\AppProjects\CoolSocket-Client\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_ce12921e83f9396b49750a3ecd34ccff92fcbc62.jar" />
     </item>
     <item

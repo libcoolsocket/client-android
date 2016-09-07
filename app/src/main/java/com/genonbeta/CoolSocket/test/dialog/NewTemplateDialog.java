@@ -23,34 +23,35 @@ public class NewTemplateDialog extends Builder
     private EditText mText;
 
     public NewTemplateDialog(Context context, TemplateListDatabase templateListDatabase, OnClickListener onClickListener, OnClickListener onClickListener2)
-	{
+    {
         super(context);
 
-		
-        this.mPositive = new OnClickListener() {
+
+        this.mPositive = new OnClickListener()
+        {
 
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
-			{
+            {
                 Editable text = NewTemplateDialog.this.mText.getText();
-				
+
                 if (!"".equals(text.toString()))
-				{
+                {
                     Toast.makeText(NewTemplateDialog.this.getContext(), NewTemplateDialog.this.mDatabase.add(text.toString()) ? "Added to list" : "Not added to list. Possibly it already exists", 0).show();
                 }
-				
+
                 NewTemplateDialog.this.mExtPositive.onClick(dialogInterface, i);
             }
         };
-		
+
         this.mDatabase = templateListDatabase;
         this.mExtPositive = onClickListener;
         this.mExtNegative = onClickListener2;
-		
+
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.layout_new_template, (ViewGroup) null);
         this.mText = (EditText) inflate.findViewById(R.id.layout_new_template_edit_text);
-		
-		setTitle("Add new template");
+
+        setTitle("Add new template");
         setNegativeButton("Cancel", this.mExtNegative);
         setPositiveButton("Add", this.mPositive);
         setView(inflate);
