@@ -27,7 +27,6 @@ public class PairListFragment extends ListFragment
         @Override
         public void onReceive(Context context, android.content.Intent intent)
         {
-            Toast.makeText(PairListFragment.this.getActivity(), "List has been refreshed", Toast.LENGTH_SHORT).show();
             PairListFragment.this.mAdapter.notifyDataSetChanged();
         }
     };
