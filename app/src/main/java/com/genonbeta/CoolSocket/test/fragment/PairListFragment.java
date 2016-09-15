@@ -47,7 +47,7 @@ public class PairListFragment extends ListFragment
         this.setEmptyText("No pair was found");
 
         this.getListView().setPadding(15, 0, 15, 0);
-
+        
         if (PairListHelper.getScanner().isScannerAvaiable())
             this.mAdapter.notifyDataSetChanged();
     }
