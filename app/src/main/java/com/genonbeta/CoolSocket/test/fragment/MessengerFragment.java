@@ -471,15 +471,16 @@ public class MessengerFragment extends Fragment
 
     public void addMessageUI(final String client, final String message, final boolean isReceived, final boolean isError)
     {
-        getActivity().runOnUiThread(new Runnable()
-                                    {
-                                        @Override
-                                        public void run()
+        if (getActivity() != null)
+            getActivity().runOnUiThread(new Runnable()
                                         {
-                                            addMessage(client, message, isReceived, isError);
+                                            @Override
+                                            public void run()
+                                            {
+                                                addMessage(client, message, isReceived, isError);
+                                            }
                                         }
-                                    }
-        );
+            );
     }
 
     public void changeUtilities(boolean mode)

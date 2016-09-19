@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.helper.GAnimater;
 import com.genonbeta.CoolSocket.test.helper.MessageItem;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
 
@@ -53,7 +55,10 @@ public class MessageListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        return getViewAt(LayoutInflater.from(this.mContext).inflate(R.layout.list_message, viewGroup, false), i);
+        if (view == null)
+            view = LayoutInflater.from(this.mContext).inflate(R.layout.list_message, viewGroup, false);
+        
+        return getViewAt(view, i);
     }
 
     public View getViewAt(View view, int i)
@@ -61,6 +66,12 @@ public class MessageListAdapter extends BaseAdapter
         TextView textView1 = (TextView) view.findViewById(R.id.list_text);
         TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
         MessageItem messageItem = (MessageItem) getItem(i);
+
+        if (!messageItem.message.equals(textView2.getText().toString()))
+        {
+            AnimationSet set = GAnimater.getAnimation(GAnimater.APPEAR);
+            view.setAnimation(set);
+        }
 
         String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
 

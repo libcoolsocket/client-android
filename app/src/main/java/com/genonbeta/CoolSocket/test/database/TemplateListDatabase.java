@@ -18,23 +18,23 @@ public class TemplateListDatabase extends SQLiteOpenHelper
 
     @Override
     public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2)
-	{
+    {
     }
 
     public TemplateListDatabase(Context context)
-	{
+    {
         super(context, DATABASE_NAME, (CursorFactory) null, 1);
         this.mContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase database)
-	{
+    {
         database.execSQL("CREATE TABLE `" + TABLE_LIST + "` (`" + COLUMN_LIST_MESSAGE + "` text NOT NULL)");
     }
 
     public boolean add(String str)
-	{
+    {
         if (isExist(str))
             return false;
 
@@ -51,17 +51,19 @@ public class TemplateListDatabase extends SQLiteOpenHelper
     }
 
     public void getList(ArrayList<String> arrayList)
-	{
+    {
         SQLiteDatabase readableDatabase = getReadableDatabase();
-        Cursor query = readableDatabase.query(TABLE_LIST, new String[] {COLUMN_LIST_MESSAGE}, (String) null, (String[]) null, (String) null, (String) null, (String) null);
+        Cursor query = readableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, (String) null, (String[]) null, (String) null, (String) null, (String) null);
 
         if (query.moveToFirst())
-		{
+        {
             int columnIndex = query.getColumnIndex(COLUMN_LIST_MESSAGE);
 
-            do {
+            do
+            {
                 arrayList.add(query.getString(columnIndex));
-            } while (query.moveToNext());
+            }
+            while (query.moveToNext());
         }
 
         query.close();
@@ -69,30 +71,30 @@ public class TemplateListDatabase extends SQLiteOpenHelper
     }
 
     public void delete(String str)
-	{
+    {
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
-        writableDatabase.delete(TABLE_LIST, COLUMN_LIST_MESSAGE + " LIKE ?", new String[] {str});
+        writableDatabase.delete(TABLE_LIST, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str});
         writableDatabase.close();
     }
 
     public void edit(String str, String str2)
-	{
+    {
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COLUMN_LIST_MESSAGE, str2);
 
-        writableDatabase.update(TABLE_LIST, contentValues, COLUMN_LIST_MESSAGE + " LIKE ?", new String[] {str});
+        writableDatabase.update(TABLE_LIST, contentValues, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str});
         writableDatabase.close();
     }
 
     public boolean isExist(String str)
-	{
+    {
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
-        Cursor query = writableDatabase.query(TABLE_LIST, new String[] {COLUMN_LIST_MESSAGE}, COLUMN_LIST_MESSAGE + " LIKE ?", new String[] {str}, (String) null, (String) null, (String) null);
+        Cursor query = writableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str}, (String) null, (String) null, (String) null);
         boolean moveToFirst = query.moveToFirst();
 
         query.close();

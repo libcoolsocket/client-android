@@ -5,11 +5,13 @@ import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.helper.GAnimater;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper.DeviceInfo;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper.ResultHandler;
@@ -29,7 +31,7 @@ public class PairListAdapter extends BaseAdapter
             mContext.sendBroadcast(Intent.getNotifyIntent());
         }
     };
-    private ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<String, DeviceInfo>();
+    private ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<>();
 
     public PairListAdapter(Context context)
     {
@@ -76,7 +78,10 @@ public class PairListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        return getViewAt(LayoutInflater.from(this.mContext).inflate(R.layout.list_pair, viewGroup, false), i);
+        if (view == null)
+            view = LayoutInflater.from(this.mContext).inflate(R.layout.list_pair, viewGroup, false);
+
+        return getViewAt(view, i);
     }
 
     public View getViewAt(View view, int i)
@@ -88,6 +93,12 @@ public class PairListAdapter extends BaseAdapter
         ((TextView) view.findViewById(R.id.list_text)).setText(str);
 
         StringBuilder stringBuilder = new StringBuilder();
+
+        if (!deviceInfo.deviceName.equals(textView.getText().toString()))
+        {
+            AnimationSet set = GAnimater.getAnimation(GAnimater.APPEAR);
+            view.setAnimation(set);
+        }
 
         if (deviceInfo.trebleShot || deviceInfo.coolSocket || deviceInfo.deviceController)
         {

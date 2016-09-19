@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
+import com.genonbeta.CoolSocket.test.helper.GAnimater;
 
 import java.util.ArrayList;
 
@@ -58,7 +60,10 @@ public class TemplateListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        return getViewAt(LayoutInflater.from(this.mContext).inflate(R.layout.list, viewGroup, false), i);
+        if (view == null)
+            view = LayoutInflater.from(this.mContext).inflate(R.layout.list, viewGroup, false);
+
+        return getViewAt(view, i);
     }
 
     public View getViewAt(View view, int i)
