@@ -34,6 +34,7 @@ public class PairListHelper
                 PairListHelper.getList().put(hostAddress, deviceInfo);
 
                 deviceInfo.isTested = true;
+
                 deviceInfo.trebleShot = NetworkUtils.testSocket(hostAddress, 1128);
                 deviceInfo.coolSocket = NetworkUtils.testSocket(hostAddress, 3000);
                 deviceInfo.deviceController = NetworkUtils.testSocket(hostAddress, 4632);
@@ -54,11 +55,11 @@ public class PairListHelper
                                             deviceInfo.deviceName = response.getString("deviceName");
                                     } catch (JSONException e)
                                     {
+                                        e.printStackTrace();
                                     }
                                 }
                             }
                     );
-
             }
         }
 
