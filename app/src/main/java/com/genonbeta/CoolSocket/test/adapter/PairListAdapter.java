@@ -2,6 +2,7 @@ package com.genonbeta.CoolSocket.test.adapter;
 
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public class PairListAdapter extends BaseAdapter
 
     public PairListAdapter(Context context)
     {
-
         this.mContext = context;
     }
 
@@ -89,12 +89,14 @@ public class PairListAdapter extends BaseAdapter
         String str = (String) getItem(i);
         DeviceInfo deviceInfo = this.mIndex.get(str);
 
-        TextView textView = (TextView) view.findViewById(R.id.list_text2);
+
         ((TextView) view.findViewById(R.id.list_text)).setText(str);
+        TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
+        TextView textView3 = (TextView) view.findViewById(R.id.list_text3);
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (!deviceInfo.deviceName.equals(textView.getText().toString()))
+        if (!str.equals(textView2.getText().toString()))
         {
             AnimationSet set = GAnimater.getAnimation(GAnimater.APPEAR);
             view.setAnimation(set);
@@ -102,7 +104,7 @@ public class PairListAdapter extends BaseAdapter
 
         if (deviceInfo.trebleShot || deviceInfo.coolSocket || deviceInfo.deviceController)
         {
-            textView.setVisibility(View.VISIBLE);
+            textView2.setVisibility(View.VISIBLE);
 
             if (deviceInfo.trebleShot)
                 stringBuilder = stringBuilder.append("TShot ");
@@ -114,7 +116,9 @@ public class PairListAdapter extends BaseAdapter
                 stringBuilder = stringBuilder.append("DContrllr ");
         }
 
-        textView.setText(stringBuilder);
+        textView2.setText(stringBuilder);
+        textView3.setVisibility((deviceInfo.deviceName != null) ? View.VISIBLE : View.GONE);
+        textView3.setText(deviceInfo.deviceName);
 
         return view;
     }
