@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/checkable_item_background" android:padding="15dp" android:layout_width="match_parent" android:layout_height="match_parent">
-    <TextView android:textSize="16sp" android:id="@+id/text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" style="@style/primaryText" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/checkable_item_background"
+                android:padding="15dp">
+
+    <TextView
+        android:id="@+id/text"
+        style="@style/primaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="16sp"/>
 </RelativeLayout>

@@ -114,9 +114,7 @@ public class TemplateListDatabase extends SQLiteOpenHelper
                 if (getShortcut(str) != null)
                     return false;
             } catch (Exception e)
-            {
-                return false;
-            }
+            {}
         }
 
         return true;

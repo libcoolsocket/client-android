@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="15sp"
             android:textStyle="italic"
             />
@@ -29,9 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/list_text2"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="16sp"
             android:textStyle="bold"
             />
@@ -43,7 +42,7 @@
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textSize="14sp"
         android:visibility="gone"
         />
