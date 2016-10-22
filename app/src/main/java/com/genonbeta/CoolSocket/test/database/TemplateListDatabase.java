@@ -14,6 +14,8 @@ public class TemplateListDatabase extends SQLiteOpenHelper
     public static final String COLUMN_LIST_MESSAGE = "message";
     public static final String DATABASE_NAME = "TemplateList";
     public static final String TABLE_LIST = "List";
+    public static final String PREFIX_SHORTCUT = "@";
+
     private Context mContext;
 
     @Override
@@ -35,7 +37,7 @@ public class TemplateListDatabase extends SQLiteOpenHelper
 
     public boolean add(String str)
     {
-        if (isExist(str))
+        if (!isAddable(str))
             return false;
 
         ContentValues contentValues = new ContentValues();
@@ -55,16 +57,26 @@ public class TemplateListDatabase extends SQLiteOpenHelper
         SQLiteDatabase readableDatabase = getReadableDatabase();
         Cursor query = readableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, (String) null, (String[]) null, (String) null, (String) null, (String) null);
 
+        ArrayList<String> lateList = new ArrayList<>();
+
         if (query.moveToFirst())
         {
             int columnIndex = query.getColumnIndex(COLUMN_LIST_MESSAGE);
 
             do
             {
-                arrayList.add(query.getString(columnIndex));
+                String currentString = query.getString(columnIndex);
+
+                if (isShortcut(currentString))
+                    lateList.add(currentString);
+                else
+                    arrayList.add(currentString);
             }
             while (query.moveToNext());
         }
+
+        arrayList.addAll(lateList);
+        lateList.clear();
 
         query.close();
         readableDatabase.close();
@@ -78,28 +90,84 @@ public class TemplateListDatabase extends SQLiteOpenHelper
         writableDatabase.close();
     }
 
-    public void edit(String str, String str2)
+    public void edit(String str, String changeAs)
     {
         SQLiteDatabase writableDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(COLUMN_LIST_MESSAGE, str2);
+        contentValues.put(COLUMN_LIST_MESSAGE, changeAs);
 
         writableDatabase.update(TABLE_LIST, contentValues, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str});
         writableDatabase.close();
     }
 
+    public boolean isAddable(String str)
+    {
+        if (isExist(str))
+            return false;
+
+        if (isShortcut(str))
+        {
+            try
+            {
+                if (getShortcut(str) != null)
+                    return false;
+            } catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public boolean isExist(String str)
     {
-        SQLiteDatabase writableDatabase = getWritableDatabase();
+        SQLiteDatabase readableDatabase = getReadableDatabase();
 
-        Cursor query = writableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str}, (String) null, (String) null, (String) null);
+        Cursor query = readableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{str}, (String) null, (String) null, (String) null);
         boolean moveToFirst = query.moveToFirst();
 
         query.close();
-        writableDatabase.close();
+        readableDatabase.close();
 
         return moveToFirst;
+    }
+
+    public boolean isShortcut(String text)
+    {
+        return text.startsWith(PREFIX_SHORTCUT);
+    }
+
+    public String getShortcut(String text) throws Exception
+    {
+        String outString = null;
+        String addition = null;
+
+        int seperatorPoint = text.indexOf(":");
+
+        if (seperatorPoint != -1)
+        {
+            addition = text.substring(seperatorPoint + 1, text.length());
+            text = text.substring(0, seperatorPoint);
+        }
+
+        SQLiteDatabase readableDatabase = getReadableDatabase();
+        Cursor query = readableDatabase.query(TABLE_LIST, new String[]{COLUMN_LIST_MESSAGE}, COLUMN_LIST_MESSAGE + " LIKE ?", new String[]{text + ":%"}, (String) null, (String) null, (String) null);
+
+        if (query.moveToFirst())
+        {
+            int columnIndex = query.getColumnIndex(COLUMN_LIST_MESSAGE);
+            outString = query.getString(columnIndex).substring((PREFIX_SHORTCUT + text + ":").length() - 1);
+            outString += addition;
+        }
+        else
+            throw new Exception("Shortcut for " + text + " is not defined in templates");
+
+        query.close();
+        readableDatabase.close();
+
+        return outString;
     }
 }

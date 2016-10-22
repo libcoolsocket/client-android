@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog.Builder;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,8 +60,10 @@ import java.util.ArrayList;
 
 public class MessengerFragment extends Fragment
 {
+    public static final String TAG = "MessengerFragment";
+
     public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    public static final String ACTION_UPDATE = "com.genonbeta.CoolSocket.test.ACTION_UpDATE";
+    public static final String ACTION_UPDATE = "com.genonbeta.CoolSocket.test.ACTION_UPDATE";
     public static final String EXTRA_MESSAGE = "extraMessage";
     public static final String EXTRA_PEER_ADDRESS = "extraPeerAddress";
 
@@ -70,6 +73,7 @@ public class MessengerFragment extends Fragment
     private Cool mCool = new Cool();
     private MessageListAdapter mAdapter;
     private OldBadgeDatabase mBadgeDatabase;
+    private TemplateListDatabase mTemplateDatabase;
     private Button mButton;
     private EditText mEditText;
     private EditText mEditTextPort;
@@ -200,6 +204,7 @@ public class MessengerFragment extends Fragment
         this.mAdapter = new MessageListAdapter(getActivity(), this.mList);
         this.mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.mBadgeDatabase = new OldBadgeDatabase(getActivity());
+        this.mTemplateDatabase = new TemplateListDatabase(getActivity());
 
         this.mEditText.setOnFocusChangeListener(new OnFocusChangeListener()
                                                 {
@@ -276,7 +281,7 @@ public class MessengerFragment extends Fragment
         }
 
         this.mJsonMenu = menu.add(7, 7, 7, "0 JSON");
-        menu.add(8, 8, 8, "Clear Msg.").setShowAsAction(1);
+        menu.add(8, 8, 8, "Clear").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         menu.add(9, 9, 9, "About");
 
         this.mJsonMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -341,7 +346,7 @@ public class MessengerFragment extends Fragment
         {
             startActivityForResult(new Intent(getActivity(), TemplateListActivity.class), REQUEST_USE_TEMPLATE);
         }
-        else if ("Clear Msg.".equals(menuItem.getTitle()))
+        else if ("Clear".equals(menuItem.getTitle()))
         {
             this.mList.clear();
             this.mBadgeDatabase.clearList();
@@ -647,6 +652,13 @@ public class MessengerFragment extends Fragment
         try
         {
             String serverAddress = this.mEditTextServer.getText().toString();
+
+            if (mTemplateDatabase.isShortcut(serverAddress))
+            {
+                serverAddress = mTemplateDatabase.getShortcut(serverAddress);
+                Log.d(TAG, "This is a shortcut: " + serverAddress);
+            }
+
             String smsModePrefix = "sms:";
             String httpPrefix = "http://";
 
@@ -659,6 +671,7 @@ public class MessengerFragment extends Fragment
             else if (serverAddress.startsWith(httpPrefix))
             {
                 final String finalServer = serverAddress;
+
                 new Thread()
                 {
                     @Override
@@ -685,7 +698,7 @@ public class MessengerFragment extends Fragment
         } catch (Exception e)
         {
             e.printStackTrace();
-            Toast.makeText(getActivity(), "Text couldn't be send (" + e.getMessage() + ")", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Send error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
         }
     }

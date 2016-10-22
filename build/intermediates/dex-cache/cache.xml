@@ -3,26 +3,44 @@
 
     <item
         is-multidex="false"
-        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.1/jars/classes.jar"
-        jumboMode="true"
+        jar="/home/veli/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="false"
         optimize="true"
         revision="24.0.3"
-        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.2.1_8a6e762a97a69b91c9b9f6694e400179928bf7ff.jar" />
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.1_229ea1be6c3a7eb179ae35552c26a9f94b0ee3f7.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
-        jumboMode="true"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="false"
         optimize="true"
         revision="24.0.3"
-        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.2.1_68898cd6a7c7820883a1af1f29a1723f55d341c7.jar" />
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_782501acd138235724228fc4a490ff5ee5272e47.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_cc6e325211b5e35eaf7c845b7b0b77fb2b7722c7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-24.2.1_b2bbae4d1730b933673b845731548dd955fb4c8f.jar" />
     </item>
     <item
         is-multidex="false"
         jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         optimize="true"
         revision="24.0.3"
         sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
@@ -31,7 +49,7 @@
     <item
         is-multidex="false"
         jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
+        jumboMode="false"
         optimize="true"
         revision="24.0.3"
         sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
@@ -54,15 +72,6 @@
         revision="24.0.3"
         sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
         <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-24.2.1_060c30b7bacb89ab051212a65c8f2d2dc3b1bff7.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/veli/CoolSocket-Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="198cd5faa07dc9b819054ebe43dcd1eae2bda7cd">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_d106d0457e9fca6f780270ec9775499fd28cc567.jar" />
     </item>
     <item
         is-multidex="false"
@@ -102,21 +111,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="24.0.3"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_782501acd138235724228fc4a490ff5ee5272e47.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_7a836bcce9fab5d03c4a110b1030561e6356ba57.jar" />
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-24.2.1_84c265e8342bb9fb12b3708959f229545ad7c80e.jar" />
     </item>
     <item
         is-multidex="false"
@@ -129,12 +129,174 @@
     </item>
     <item
         is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.2.1_8a6e762a97a69b91c9b9f6694e400179928bf7ff.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/home/veli/CoolSocket-Client/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
         sha1="7e41c9fa1eeee8a3bd2f4221066876365f46452f">
         <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/instant-run_9d245897c2402192a814eb32a24a748861330c4e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_7a836bcce9fab5d03c4a110b1030561e6356ba57.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_b209e6251d8ce61643bba9476db913efabc7f443.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.1_229ea1be6c3a7eb179ae35552c26a9f94b0ee3f7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-24.2.1_b0e7653bc0a31aa71783f2601243a0b9bd300f02.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-24.2.1_8a6e762a97a69b91c9b9f6694e400179928bf7ff.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.2.1_68898cd6a7c7820883a1af1f29a1723f55d341c7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-design-24.2.1_11b731db9148af5684edb0be588d4b9ae33db9e5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_73b773b8d8fba8bc832be3b454af1b08e0badb31.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="198cd5faa07dc9b819054ebe43dcd1eae2bda7cd">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_d106d0457e9fca6f780270ec9775499fd28cc567.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-24.2.1_060c30b7bacb89ab051212a65c8f2d2dc3b1bff7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-24.2.1_053584cd1c819c7b8bb2ce23bb45f914dc1f545f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-24.2.1_7a29959df9df4f29b0663ccf63a064bc25a3d34f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-24.2.1_7039a4839d0ccd62f37d53be5fc897bb05fdd1f9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_782501acd138235724228fc4a490ff5ee5272e47.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-24.2.1_68898cd6a7c7820883a1af1f29a1723f55d341c7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-24.2.1_1edd2a56e8808a0999fe79686d3e6eb45d95a1be.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/veli/CoolSocket-Client/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/internal_impl-24.2.1_7a836bcce9fab5d03c4a110b1030561e6356ba57.jar" />
     </item>
     <item
         is-multidex="false"
@@ -153,15 +315,6 @@
         revision="24.0.3"
         sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
         <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-24.2.1_84c265e8342bb9fb12b3708959f229545ad7c80e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/veli/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.3"
-        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="/home/veli/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/support-annotations-24.2.1_229ea1be6c3a7eb179ae35552c26a9f94b0ee3f7.jar" />
     </item>
     <item
         is-multidex="false"
