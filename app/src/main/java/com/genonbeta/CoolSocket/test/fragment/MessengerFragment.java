@@ -45,11 +45,13 @@ import com.genonbeta.CoolSocket.test.database.OldBadgeDatabase;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 import com.genonbeta.CoolSocket.test.dialog.JsonEditorDialog;
 import com.genonbeta.CoolSocket.test.helper.MessageItem;
+import com.genonbeta.CoolSocket.test.helper.RemoteServer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -347,7 +349,6 @@ public class MessengerFragment extends Fragment
         }
         else if (7 == menuItem.getItemId())
         {
-
             JsonEditorDialog.OnEditorClickListener listItemSelected = new JsonEditorDialog.OnEditorClickListener()
             {
                 @Override
@@ -392,7 +393,7 @@ public class MessengerFragment extends Fragment
     @Override
     public void onPause()
     {
-        super.onDestroyView();
+        super.onPause();
         getActivity().unregisterReceiver(mSMSReceiver);
 
         Editor edit = this.mPreferences.edit();
@@ -641,18 +642,39 @@ public class MessengerFragment extends Fragment
         return false;
     }
 
-    protected boolean sendMessage(String message)
+    protected boolean sendMessage(final String message)
     {
         try
         {
             String serverAddress = this.mEditTextServer.getText().toString();
             String smsModePrefix = "sms:";
+            String httpPrefix = "http://";
 
             if (serverAddress.startsWith(smsModePrefix))
             {
                 serverAddress = serverAddress.substring(smsModePrefix.length());
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(serverAddress, null, message, null, null);
+            }
+            else if (serverAddress.startsWith(httpPrefix))
+            {
+                final String finalServer = serverAddress;
+                new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        super.run();
+                        try
+                        {
+                            RemoteServer server = new RemoteServer(finalServer);
+                            addMessageUI(finalServer, server.connect("command", message), true, false);
+                        } catch (IOException e)
+                        {
+                            addMessageUI(finalServer, "Message couldn't be delivered", false, true);
+                        }
+                    }
+                }.start();
             }
             else
                 Messenger.send(serverAddress, Integer.parseInt(this.mEditTextPort.getText().toString()), message, this.mSenderHandler);
@@ -662,6 +684,7 @@ public class MessengerFragment extends Fragment
             return true;
         } catch (Exception e)
         {
+            e.printStackTrace();
             Toast.makeText(getActivity(), "Text couldn't be send (" + e.getMessage() + ")", Toast.LENGTH_LONG).show();
             return false;
         }
