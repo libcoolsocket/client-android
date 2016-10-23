@@ -158,7 +158,9 @@ public class TemplateListDatabase extends SQLiteOpenHelper
         {
             int columnIndex = query.getColumnIndex(COLUMN_LIST_MESSAGE);
             outString = query.getString(columnIndex).substring((PREFIX_SHORTCUT + text + ":").length() - 1);
-            outString += addition;
+
+            if(addition != null)
+                outString += addition;
         }
         else
             throw new Exception("Shortcut for " + text + " is not defined in templates");

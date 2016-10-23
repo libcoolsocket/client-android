@@ -661,6 +661,7 @@ public class MessengerFragment extends Fragment
 
             String smsModePrefix = "sms:";
             String httpPrefix = "http://";
+            String httpsPrefix = "https://";
 
             if (serverAddress.startsWith(smsModePrefix))
             {
@@ -668,7 +669,7 @@ public class MessengerFragment extends Fragment
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(serverAddress, null, message, null, null);
             }
-            else if (serverAddress.startsWith(httpPrefix))
+            else if (serverAddress.startsWith(httpPrefix) || serverAddress.startsWith(httpsPrefix))
             {
                 final String finalServer = serverAddress;
 

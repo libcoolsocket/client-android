@@ -22,5 +22,6 @@ android {
 dependencies {
     compile 'com.android.support:design:24+'
     compile 'com.android.support:appcompat-v7:24+'
+    compile 'com.github.kevinsawicki:http-request:6+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
 }
