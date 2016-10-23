@@ -69,7 +69,7 @@ public class MessengerFragment extends Fragment
 
     public static final int REQUEST_CHOOSE_PEER = 15;
     public static final int REQUEST_USE_TEMPLATE = 30;
-
+    IntentFilter mSMSIntentFilter = new IntentFilter(ACTION_SMS_RECEIVED);
     private Cool mCool = new Cool();
     private MessageListAdapter mAdapter;
     private OldBadgeDatabase mBadgeDatabase;
@@ -88,90 +88,6 @@ public class MessengerFragment extends Fragment
     private ArrayList<MessageItem> mList = new ArrayList<MessageItem>();
     private MessageSenderHandler mSenderHandler = new MessageSenderHandler();
     private SMSReceiver mSMSReceiver = new SMSReceiver();
-    IntentFilter mSMSIntentFilter = new IntentFilter(ACTION_SMS_RECEIVED);
-
-    private class Cool extends CoolCommunication
-    {
-        public Cool()
-        {
-            super(3000);
-        }
-
-        @Override
-        protected void onMessage(Socket socket, String message, PrintWriter printWriter, String clientIp)
-        {
-            if (message.length() > 0)
-                addMessageUI(clientIp, message, true, false);
-        }
-
-        @Override
-        protected void onError(Exception exception)
-        {
-        }
-    }
-
-    private class SMSReceiver extends BroadcastReceiver
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            if (ACTION_SMS_RECEIVED.equals(intent.getAction()))
-            {
-                Bundle bundle = intent.getExtras();
-
-                if (bundle != null)
-                {
-                    // get sms objects
-                    Object[] pdus = (Object[]) bundle.get("pdus");
-
-                    if (pdus.length == 0)
-                        return;
-
-                    // large message might be broken into many
-                    SmsMessage[] messages = new SmsMessage[pdus.length];
-
-                    StringBuilder sb = new StringBuilder();
-
-                    for (int i = 0; i < pdus.length; i++)
-                    {
-                        messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                        sb.append(messages[i].getMessageBody());
-                    }
-
-                    String sender = messages[0].getOriginatingAddress();
-                    String message = sb.toString();
-
-                    addMessageUI(sender, message, true, false);
-                }
-            }
-        }
-    }
-
-    private class MessageSenderHandler extends ResponseHandler
-    {
-        private InetSocketAddress mAddress;
-
-        @Override
-        public void onConfigure(Process process)
-        {
-            super.onConfigure(process);
-            this.mAddress = (InetSocketAddress) process.getSocketAddress();
-        }
-
-        @Override
-        public void onResponseAvaiable(String response)
-        {
-            if (response != null && !response.equals(""))
-                addMessageUI(mAddress.getHostName(), response, true, false);
-        }
-
-        @Override
-        public void onError(Exception exception)
-        {
-            showToast("Someting went wrong while sending your message: (error) " + exception, Toast.LENGTH_SHORT);
-            addMessageUI("Send failed", "@" + exception, false, true);
-        }
-    }
 
     @Override
     public void onCreate(Bundle bundle)
@@ -770,5 +686,88 @@ public class MessengerFragment extends Fragment
     {
         if (this.mJsonMenu != null)
             this.mJsonMenu.setTitle(this.mPendingJson.length() + " JSON");
+    }
+
+    private class Cool extends CoolCommunication
+    {
+        public Cool()
+        {
+            super(3000);
+        }
+
+        @Override
+        protected void onMessage(Socket socket, String message, PrintWriter printWriter, String clientIp)
+        {
+            if (message.length() > 0)
+                addMessageUI(clientIp, message, true, false);
+        }
+
+        @Override
+        protected void onError(Exception exception)
+        {
+        }
+    }
+
+    private class SMSReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            if (ACTION_SMS_RECEIVED.equals(intent.getAction()))
+            {
+                Bundle bundle = intent.getExtras();
+
+                if (bundle != null)
+                {
+                    // get sms objects
+                    Object[] pdus = (Object[]) bundle.get("pdus");
+
+                    if (pdus.length == 0)
+                        return;
+
+                    // large message might be broken into many
+                    SmsMessage[] messages = new SmsMessage[pdus.length];
+
+                    StringBuilder sb = new StringBuilder();
+
+                    for (int i = 0; i < pdus.length; i++)
+                    {
+                        messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                        sb.append(messages[i].getMessageBody());
+                    }
+
+                    String sender = messages[0].getOriginatingAddress();
+                    String message = sb.toString();
+
+                    addMessageUI(sender, message, true, false);
+                }
+            }
+        }
+    }
+
+    private class MessageSenderHandler extends ResponseHandler
+    {
+        private InetSocketAddress mAddress;
+
+        @Override
+        public void onConfigure(Process process)
+        {
+            super.onConfigure(process);
+            this.mAddress = (InetSocketAddress) process.getSocketAddress();
+        }
+
+        @Override
+        public void onResponseAvaiable(String response)
+        {
+            if (response != null && !response.equals(""))
+                addMessageUI(mAddress.getHostName(), response, true, false);
+        }
+
+        @Override
+        public void onError(Exception exception)
+        {
+            showToast("Someting went wrong while sending your message: (error) " + exception, Toast.LENGTH_SHORT);
+            addMessageUI("Send failed", "@" + exception, false, true);
+        }
     }
 }

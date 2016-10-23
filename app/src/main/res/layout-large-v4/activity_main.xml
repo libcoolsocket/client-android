@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:orientation="horizontal" 
-	android:layout_width="match_parent" 
-	android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-	<fragment 
-		android:name="com.genonbeta.CoolSocket.test.fragment.TemplateListFragment"
-		android:id="@+id/main_template_list_fragment" 
-		android:tag="templateListFragment"
-		android:layout_width="0dp"
-		android:layout_height="match_parent"
-		android:layout_marginLeft="5dp"
-		android:layout_weight="0.25"
-	/>
+    <fragment
+        android:id="@+id/main_template_list_fragment"
+        android:name="com.genonbeta.CoolSocket.test.fragment.TemplateListFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="0.25"
+        android:tag="templateListFragment"
+        />
 
-	<fragment 
-		android:name="com.genonbeta.CoolSocket.test.fragment.MessengerFragment" 
-		android:id="@+id/main_messenger_fragment" 
-		android:tag="messengerFragment" 
-		android:layout_width="0dp"
-		android:layout_height="match_parent" 
-		android:layout_marginLeft="5dp"
-		android:layout_marginRight="5dp"
-		android:layout_weight="0.40"
-	/>
+    <fragment
+        android:id="@+id/main_messenger_fragment"
+        android:name="com.genonbeta.CoolSocket.test.fragment.MessengerFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="0.40"
+        android:tag="messengerFragment"
+        />
 
-	<fragment 
-		android:name="com.genonbeta.CoolSocket.test.fragment.PairListFragment" 
-		android:id="@+id/main_pair_list_fragment"
-		android:tag="pairListFragment"
-		android:layout_width="0dp" 
-		android:layout_height="match_parent"
-		android:layout_marginRight="5dp" 
-		android:layout_weight="0.25"
-	/>
+    <fragment
+        android:id="@+id/main_pair_list_fragment"
+        android:name="com.genonbeta.CoolSocket.test.fragment.PairListFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="5dp"
+        android:layout_weight="0.25"
+        android:tag="pairListFragment"
+        />
 
 </LinearLayout>

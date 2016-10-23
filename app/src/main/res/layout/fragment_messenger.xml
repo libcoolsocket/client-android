@@ -1,69 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:paddingLeft="15dp" android:paddingRight="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content">
-    <LinearLayout 
-		android:id="@+id/mainLinearLayout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
-        <EditText 
-			android:gravity="center" 
-			android:id="@+id/mainServer" 
-			android:layout_width="0dp" 
-			android:layout_height="wrap_content" 
-			android:text="0.0.0.0" 
-			android:hint="server" 
-			android:singleLine="true" 
-			android:layout_weight="35.0"
-			android:inputType="textNoSuggestions|textShortMessage"
-		/>
+    <LinearLayout
+        android:id="@+id/mainLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
 
-        <EditText 
-			android:gravity="center" 
-			android:id="@+id/mainPort"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content" 
-			android:text="3000"
-			android:hint="port"
-			android:singleLine="true" 
-			android:layout_weight="14.0"
-			android:inputType="number"
-		/>
+        <EditText
+            android:id="@+id/mainServer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="35.0"
+            android:gravity="center"
+            android:hint="server"
+            android:inputType="textNoSuggestions|textShortMessage"
+            android:singleLine="true"
+            android:text="0.0.0.0"
+            />
 
-        <EditText 
-			android:id="@+id/mainEditText"
-			android:layout_width="0dp" 
-			android:layout_height="wrap_content" 
-			android:hint="Enter text..." 
-			android:layout_weight="30.0"
-			android:inputType="textMultiLine"
-		/>
+        <EditText
+            android:id="@+id/mainPort"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="14.0"
+            android:gravity="center"
+            android:hint="port"
+            android:inputType="number"
+            android:singleLine="true"
+            android:text="3000"
+            />
 
-        <Button 
-			android:id="@+id/mainButton"
-			android:background="@drawable/send_button_drawable"
-			android:visibility="gone"
-			android:layout_width="50dp"
-			android:layout_height="50dp" />
+        <EditText
+            android:id="@+id/mainEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30.0"
+            android:hint="Enter text..."
+            android:inputType="textMultiLine"
+            />
+
+        <Button
+            android:id="@+id/mainButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/send_button_drawable"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
     <View
-		android:id="@+id/seperator"
-		android:background="@color/seperatorColor"
-		android:layout_width="wrap_content"
-		android:layout_height="2dp"
-		android:layout_above="@+id/mainLinearLayout" 
-	/>
+        android:id="@+id/seperator"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_above="@+id/mainLinearLayout"
+        android:background="@color/seperatorColor"
+        />
 
-	<ListView 
-		android:id="@+id/mainListView" 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:divider="@color/colorPrimaryDark"
-		android:layout_above="@+id/seperator"
-		android:layout_alignParentTop="true"
-	/>
+    <ListView
+        android:id="@+id/mainListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seperator"
+        android:layout_alignParentTop="true"
+        android:divider="@color/colorPrimaryDark"
+        />
 
 </RelativeLayout>

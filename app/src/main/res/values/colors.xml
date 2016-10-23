@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="basicColor">#303039</color>
-	<color name="colorPrimary">#404049</color>
-	<color name="colorPrimaryDark">@color/colorPrimary</color>
-	<color name="windowBackground">@color/basicColor</color>
-	<color name="colorAccent">#F0F0F9</color>
-	<color name="seperatorColor">#505059</color>
-	<color name="actionModeBackground">@color/basicColor</color>
-	<color name="navigationColor">#000000</color>
-	<color name="itemBackground">#404049</color>
-	<color name="selectorColor">@color/itemBackground</color>
-	<color name="pressedColor">@color/itemBackground</color>
-	<color name="receivedMessage">#00B000</color>
-	<color name="errorMessage">#b00c00</color>
-	<color name="sentMessage">#FFFFFF</color>
+    <color name="basicColor">#303039</color>
+    <color name="colorPrimary">#404049</color>
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
+    <color name="windowBackground">@color/basicColor</color>
+    <color name="colorAccent">#F0F0F9</color>
+    <color name="seperatorColor">#505059</color>
+    <color name="actionModeBackground">@color/basicColor</color>
+    <color name="navigationColor">#000000</color>
+    <color name="itemBackground">#404049</color>
+    <color name="selectorColor">@color/itemBackground</color>
+    <color name="pressedColor">@color/itemBackground</color>
+    <color name="receivedMessage">#00B000</color>
+    <color name="errorMessage">#b00c00</color>
+    <color name="sentMessage">#FFFFFF</color>
 </resources>

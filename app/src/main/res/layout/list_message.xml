@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" 
-	android:orientation="vertical" 
-	android:background="@drawable/checkable_item_background" 
-	android:padding="12dp" 
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	
-    <TextView 
-		android:textSize="16sp" 
-		android:textStyle="bold" 
-		android:id="@+id/list_text" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:maxLines="1"
-		android:ellipsize="end"
-		style="@style/primaryText" 
-	/>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+    android:background="@drawable/checkable_item_background"
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <TextView
-		android:textSize="14sp" 
-		android:id="@+id/list_text2" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" 
-		style="@style/secondaryText"
-	/>
+        android:id="@+id/list_text"
+        style="@style/primaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/list_text2"
+        style="@style/secondaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        />
 
 </LinearLayout>

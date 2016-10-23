@@ -4,13 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
-import com.genonbeta.CoolSocket.test.helper.GAnimater;
 
 import java.util.ArrayList;
 

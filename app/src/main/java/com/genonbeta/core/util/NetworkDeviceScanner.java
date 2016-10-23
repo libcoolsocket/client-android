@@ -85,6 +85,13 @@ public class NetworkDeviceScanner
         mIsLockRequested = lock;
     }
 
+    public static interface ScannerHandler
+    {
+        public void onDeviceFound(InetAddress address);
+
+        public void onThreadsCompleted();
+    }
+
     protected class Scanner implements Runnable
     {
         private String mAddressPrefix = "192.168.0.";
@@ -147,12 +154,5 @@ public class NetworkDeviceScanner
         {
             new Thread(scanner).start();
         }
-    }
-
-    public static interface ScannerHandler
-    {
-        public void onDeviceFound(InetAddress address);
-
-        public void onThreadsCompleted();
     }
 }

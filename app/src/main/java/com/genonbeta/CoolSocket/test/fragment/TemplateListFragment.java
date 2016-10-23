@@ -35,72 +35,6 @@ public class TemplateListFragment extends ListFragment
         }
     };
 
-    private class ChoiceListener implements MultiChoiceModeListener
-    {
-        protected HashSet<String> mCheckedList = new HashSet<String>();
-        protected MenuItem mEdit;
-
-        @Override
-        public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
-        {
-            actionMode.setTitle("Edit templates");
-
-            menu.add("Delete");
-            this.mEdit = menu.add("Edit");
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
-        {
-            this.mCheckedList.clear();
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
-        {
-            if ("Delete".equals(menuItem.getTitle()))
-            {
-                for (String delete : this.mCheckedList)
-                {
-                    TemplateListFragment.this.mAdapter.getDatabase().delete(delete);
-                }
-            }
-            else if ("Edit".equals(menuItem.getTitle()) || this.mCheckedList.size() != 1)
-            {
-                EditTemplateDialog editTemplateDialog = new EditTemplateDialog(TemplateListFragment.this.getActivity(), TemplateListFragment.this.mAdapter.getDatabase(), TemplateListFragment.this.mPositive, null, (String) this.mCheckedList.toArray()[0]);
-                editTemplateDialog.show();
-            }
-
-            actionMode.finish();
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode actionMode)
-        {
-            TemplateListFragment.this.mAdapter.update();
-            this.mCheckedList.clear();
-            this.mEdit = null;
-        }
-
-        @Override
-        public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
-        {
-            String str = (String) TemplateListFragment.this.mAdapter.getItem(position);
-
-            if (isSelected)
-                this.mCheckedList.add(str);
-            else
-                this.mCheckedList.remove(str);
-
-            this.mEdit.setVisible(this.mCheckedList.size() == 1);
-            actionMode.setSubtitle(TemplateListFragment.this.getListView().getCheckedItemCount() + " selected");
-        }
-    }
-
     @Override
     public void onActivityCreated(Bundle bundle)
     {
@@ -176,5 +110,71 @@ public class TemplateListFragment extends ListFragment
     private MessengerFragment getMessengerFragment()
     {
         return ((HomeActivity) getActivity()).getMessengerFragment();
+    }
+
+    private class ChoiceListener implements MultiChoiceModeListener
+    {
+        protected HashSet<String> mCheckedList = new HashSet<String>();
+        protected MenuItem mEdit;
+
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+        {
+            actionMode.setTitle("Edit templates");
+
+            menu.add("Delete");
+            this.mEdit = menu.add("Edit");
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
+        {
+            this.mCheckedList.clear();
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+        {
+            if ("Delete".equals(menuItem.getTitle()))
+            {
+                for (String delete : this.mCheckedList)
+                {
+                    TemplateListFragment.this.mAdapter.getDatabase().delete(delete);
+                }
+            }
+            else if ("Edit".equals(menuItem.getTitle()) || this.mCheckedList.size() != 1)
+            {
+                EditTemplateDialog editTemplateDialog = new EditTemplateDialog(TemplateListFragment.this.getActivity(), TemplateListFragment.this.mAdapter.getDatabase(), TemplateListFragment.this.mPositive, null, (String) this.mCheckedList.toArray()[0]);
+                editTemplateDialog.show();
+            }
+
+            actionMode.finish();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode)
+        {
+            TemplateListFragment.this.mAdapter.update();
+            this.mCheckedList.clear();
+            this.mEdit = null;
+        }
+
+        @Override
+        public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
+        {
+            String str = (String) TemplateListFragment.this.mAdapter.getItem(position);
+
+            if (isSelected)
+                this.mCheckedList.add(str);
+            else
+                this.mCheckedList.remove(str);
+
+            this.mEdit.setVisible(this.mCheckedList.size() == 1);
+            actionMode.setSubtitle(TemplateListFragment.this.getListView().getCheckedItemCount() + " selected");
+        }
     }
 }

@@ -42,62 +42,9 @@ abstract public class CoolSocket
         this.mSocketAddress = new InetSocketAddress(address, port);
     }
 
-    protected void onClosingConnection(ClientHandler client)
-    {
-    }
-
-    abstract protected void onError(Exception exception);
-
-    abstract protected void onPacketReceived(Socket socket);
-
-    public ArrayList<ClientHandler> getConnections()
-    {
-        return this.mConnections;
-    }
-
-    public int getLocalPort()
-    {
-        return this.getServerSocket().getLocalPort();
-    }
-
-    protected ServerSocket getServerSocket()
-    {
-        return this.mServerSocket;
-    }
-
-    public SocketAddress getSocketAddress()
-    {
-        return this.mSocketAddress;
-    }
-
-    protected SocketRunnable getSocketRunnable()
-    {
-        return this.mSocketRunnable;
-    }
-
-    protected Thread getServerThread()
-    {
-        return this.mServerThread;
-    }
-
     public static PrintWriter getStreamWriter(OutputStream outputStream)
     {
         return new PrintWriter(new BufferedOutputStream(outputStream));
-    }
-
-    public boolean isComponentsReady()
-    {
-        return this.getServerSocket() != null && this.getServerThread() != null && this.getSocketAddress() != null;
-    }
-
-    public boolean isInterrupted()
-    {
-        return this.getServerThread().isInterrupted();
-    }
-
-    public boolean isServerAlive()
-    {
-        return this.getServerThread().isAlive();
     }
 
     public static ByteArrayOutputStream readStream(InputStream inputStreamIns) throws IOException
@@ -130,6 +77,64 @@ abstract public class CoolSocket
         return message.substring(0, message.length() - END_SEQUENCE.length());
     }
 
+    protected void onClosingConnection(ClientHandler client)
+    {
+    }
+
+    abstract protected void onError(Exception exception);
+
+    abstract protected void onPacketReceived(Socket socket);
+
+    public ArrayList<ClientHandler> getConnections()
+    {
+        return this.mConnections;
+    }
+
+    public int getLocalPort()
+    {
+        return this.getServerSocket().getLocalPort();
+    }
+
+    protected ServerSocket getServerSocket()
+    {
+        return this.mServerSocket;
+    }
+
+    public SocketAddress getSocketAddress()
+    {
+        return this.mSocketAddress;
+    }
+
+    public void setSocketAddress(SocketAddress address)
+    {
+        this.mSocketAddress = address;
+    }
+
+    protected SocketRunnable getSocketRunnable()
+    {
+        return this.mSocketRunnable;
+    }
+
+    protected Thread getServerThread()
+    {
+        return this.mServerThread;
+    }
+
+    public boolean isComponentsReady()
+    {
+        return this.getServerSocket() != null && this.getServerThread() != null && this.getSocketAddress() != null;
+    }
+
+    public boolean isInterrupted()
+    {
+        return this.getServerThread().isInterrupted();
+    }
+
+    public boolean isServerAlive()
+    {
+        return this.getServerThread().isAlive();
+    }
+
     protected boolean respondRequest(Socket socket)
     {
         if (this.getConnections().size() < this.mMaxConnections || this.mMaxConnections == 0)
@@ -150,11 +155,6 @@ abstract public class CoolSocket
     public void setMaxConnections(int value)
     {
         this.mMaxConnections = value;
-    }
-
-    public void setSocketAddress(SocketAddress address)
-    {
-        this.mSocketAddress = address;
     }
 
     public void setSocketTimeout(int timeout)

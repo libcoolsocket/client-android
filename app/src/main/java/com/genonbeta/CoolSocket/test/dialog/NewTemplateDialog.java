@@ -16,10 +16,10 @@ import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 
 public class NewTemplateDialog extends Builder
 {
-    private TemplateListDatabase mDatabase;
     public OnClickListener mExtNegative;
     public OnClickListener mExtPositive;
     OnClickListener mPositive;
+    private TemplateListDatabase mDatabase;
     private EditText mText;
 
     public NewTemplateDialog(Context context, TemplateListDatabase templateListDatabase, OnClickListener onClickListener, OnClickListener onClickListener2)

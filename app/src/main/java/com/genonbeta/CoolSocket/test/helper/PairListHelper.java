@@ -13,12 +13,34 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class PairListHelper
 {
     private static ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<String, DeviceInfo>();
     private static NetworkDeviceScanner mScanner = new NetworkDeviceScanner();
+
+    public static ArrayMap<String, DeviceInfo> getList()
+    {
+        synchronized (mIndex)
+        {
+            return mIndex;
+        }
+    }
+
+    public static NetworkDeviceScanner getScanner()
+    {
+        return mScanner;
+    }
+
+    public static boolean update(ResultHandler resultHandler)
+    {
+        if (!mScanner.isScannerAvaiable())
+            return false;
+
+        getList().clear();
+
+        return mScanner.scan(NetworkUtils.getInterfacesWithOnlyIp(true, new String[]{"rmnet"}), resultHandler);
+    }
 
     public static class ResultHandler implements ScannerHandler
     {
@@ -76,28 +98,5 @@ public class PairListHelper
         public boolean isTested = false;
         public boolean trebleShot = false;
         public String deviceName = null;
-    }
-
-    public static ArrayMap<String, DeviceInfo> getList()
-    {
-        synchronized (mIndex)
-        {
-            return mIndex;
-        }
-    }
-
-    public static NetworkDeviceScanner getScanner()
-    {
-        return mScanner;
-    }
-
-    public static boolean update(ResultHandler resultHandler)
-    {
-        if (!mScanner.isScannerAvaiable())
-            return false;
-
-        getList().clear();
-
-        return mScanner.scan(NetworkUtils.getInterfacesWithOnlyIp(true, new String[]{"rmnet"}), resultHandler);
     }
 }

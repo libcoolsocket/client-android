@@ -57,7 +57,7 @@ public class MessageListAdapter extends BaseAdapter
     {
         if (view == null)
             view = LayoutInflater.from(this.mContext).inflate(R.layout.list_message, viewGroup, false);
-        
+
         return getViewAt(view, i);
     }
 

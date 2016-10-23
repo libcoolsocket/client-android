@@ -2,7 +2,6 @@ package com.genonbeta.CoolSocket.test.adapter;
 
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

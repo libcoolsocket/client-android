@@ -183,6 +183,11 @@ public abstract class CoolCommunication extends CoolSocket
                 return this.mSocket;
             }
 
+            public void setSocket(Socket socket)
+            {
+                this.mSocket = socket;
+            }
+
             public SocketAddress getSocketAddress()
             {
                 return this.mAddress;
@@ -193,9 +198,20 @@ public abstract class CoolCommunication extends CoolSocket
                 return this.mSocketTimeout;
             }
 
+            public void setSocketTimeout(int timeout)
+            {
+                this.mSocketTimeout = timeout;
+            }
+
             public boolean isResponseReceived()
             {
                 return this.mResponseReceived;
+            }
+
+            public void setResponseReceived(String response)
+            {
+                this.mResponse = response;
+                this.mResponseReceived = true;
             }
 
             public boolean isFlushRequested()
@@ -235,22 +251,6 @@ public abstract class CoolCommunication extends CoolSocket
                 }
 
                 return false;
-            }
-
-            public void setResponseReceived(String response)
-            {
-                this.mResponse = response;
-                this.mResponseReceived = true;
-            }
-
-            public void setSocket(Socket socket)
-            {
-                this.mSocket = socket;
-            }
-
-            public void setSocketTimeout(int timeout)
-            {
-                this.mSocketTimeout = timeout;
             }
 
             public void setWriter(PrintWriter writer)

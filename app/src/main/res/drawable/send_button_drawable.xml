@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/borderless_layout" />
-    <item android:drawable="@drawable/ic_send_white_36dp"
-          android:bottom="12dp"
-          android:left="12dp"
-          android:right="12dp"
-          android:top="12dp"/>
+    <item android:drawable="@drawable/borderless_layout"/>
+    <item
+        android:bottom="12dp"
+        android:drawable="@drawable/ic_send_white_36dp"
+        android:left="12dp"
+        android:right="12dp"
+        android:top="12dp"/>
 </layer-list>

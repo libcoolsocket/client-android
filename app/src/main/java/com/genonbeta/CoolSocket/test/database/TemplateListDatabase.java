@@ -18,15 +18,15 @@ public class TemplateListDatabase extends SQLiteOpenHelper
 
     private Context mContext;
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2)
-    {
-    }
-
     public TemplateListDatabase(Context context)
     {
         super(context, DATABASE_NAME, (CursorFactory) null, 1);
         this.mContext = context;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2)
+    {
     }
 
     @Override
@@ -114,7 +114,8 @@ public class TemplateListDatabase extends SQLiteOpenHelper
                 if (getShortcut(str) != null)
                     return false;
             } catch (Exception e)
-            {}
+            {
+            }
         }
 
         return true;
@@ -159,7 +160,7 @@ public class TemplateListDatabase extends SQLiteOpenHelper
             int columnIndex = query.getColumnIndex(COLUMN_LIST_MESSAGE);
             outString = query.getString(columnIndex).substring((PREFIX_SHORTCUT + text + ":").length() - 1);
 
-            if(addition != null)
+            if (addition != null)
                 outString += addition;
         }
         else

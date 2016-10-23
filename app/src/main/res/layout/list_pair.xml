@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/checkable_item_background"
-    android:padding="15dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/checkable_item_background"
+    android:orientation="vertical"
+    android:padding="15dp">
 
     <TextView
-        android:textSize="14sp"
         android:id="@+id/list_text2"
-        android:visibility="gone"
+        style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        style="@style/secondaryText"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:visibility="gone"
         />
 
     <TextView
+        android:id="@+id/list_text"
+        style="@style/primaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/list_text2"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:ellipsize="end"
-        android:id="@+id/list_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_toLeftOf="@+id/list_text2"
-        android:layout_alignParentLeft="true"
-        style="@style/primaryText"
         />
 
     <TextView
-        android:textSize="15sp"
-        android:textStyle="italic"
-        android:ellipsize="end"
         android:id="@+id/list_text3"
+        style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_toLeftOf="@+id/list_text2"
-        android:layout_below="@id/list_text"
         android:layout_alignParentLeft="true"
-        style="@style/secondaryText"
+        android:layout_below="@id/list_text"
+        android:layout_toLeftOf="@+id/list_text2"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:textStyle="italic"
         />
 
 </RelativeLayout>

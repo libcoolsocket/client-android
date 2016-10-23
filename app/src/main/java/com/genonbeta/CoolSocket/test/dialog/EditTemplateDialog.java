@@ -15,11 +15,11 @@ import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 
 public class EditTemplateDialog extends Builder
 {
-    private TemplateListDatabase mDatabase;
     public OnClickListener mExtNegative;
     public OnClickListener mExtPositive;
-    private String mOriginal;
     OnClickListener mPositive;
+    private TemplateListDatabase mDatabase;
+    private String mOriginal;
     private EditText mText;
 
     public EditTemplateDialog(Context context, TemplateListDatabase templateListDatabase, OnClickListener onClickListener, OnClickListener onClickListener2, String str)

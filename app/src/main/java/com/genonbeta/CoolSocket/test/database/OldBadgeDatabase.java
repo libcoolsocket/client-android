@@ -25,15 +25,15 @@ public class OldBadgeDatabase extends SQLiteOpenHelper
     public static final String TABLE_LIST = "List";
     private Context mContext;
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2)
-    {
-    }
-
     public OldBadgeDatabase(Context context)
     {
         super(context, DATABASE_NAME, (CursorFactory) null, 1);
         this.mContext = context;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2)
+    {
     }
 
     @Override

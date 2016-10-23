@@ -2,14 +2,7 @@ package com.genonbeta.CoolSocket.test.helper;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 
 public class RemoteServer
@@ -23,7 +16,7 @@ public class RemoteServer
 
     public String connect(String postKey, String postValue) throws IOException
     {
-        HttpRequest request =  HttpRequest.get(this.mConnection);
+        HttpRequest request = HttpRequest.get(this.mConnection);
         StringBuilder output = new StringBuilder();
 
         if (postKey != null && postValue != null)
