@@ -599,7 +599,7 @@ public class MessengerFragment extends Fragment
                         {
                             RemoteServer server = new RemoteServer(finalServer);
                             addMessageUI(finalServer, server.connect("command", message), true, false);
-                        } catch (IOException e)
+                        } catch (Exception e)
                         {
                             addMessageUI(finalServer, "Message couldn't be delivered", false, true);
                         }
