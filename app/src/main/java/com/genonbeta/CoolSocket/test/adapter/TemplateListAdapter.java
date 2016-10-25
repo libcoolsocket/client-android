@@ -1,6 +1,8 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,19 @@ import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
+import com.genonbeta.CoolSocket.test.helper.TemplateItem;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TemplateListAdapter extends BaseAdapter
 {
     private Context mContext;
     private TemplateListDatabase mDatabase;
-    private ArrayList<String> mList = new ArrayList<String>();
+    private ArrayList<TemplateItem> mList = new ArrayList<>();
 
     public TemplateListAdapter(Context context)
     {
@@ -26,8 +33,36 @@ public class TemplateListAdapter extends BaseAdapter
 
     public void update()
     {
+        ArrayList<String> list = new ArrayList<String>();
+
         this.mList.clear();
-        this.mDatabase.getList(this.mList);
+        this.mDatabase.getList(list);
+
+        for (String template : list)
+        {
+            TemplateItem item = new TemplateItem();
+
+            item.template = template;
+
+            try
+            {
+                JSONObject object = new JSONObject(template);
+
+                item.isJson = true;
+                item.template = object.toString(1);
+                item.template = item.template.substring(2, item.template.length() - 2);
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            item.isShortcut = !item.isJson && TemplateListDatabase.isShortcut(template);
+
+
+            item.templateOriginal = template;
+
+            this.mList.add(item);
+        }
 
         notifyDataSetChanged();
     }
@@ -66,7 +101,20 @@ public class TemplateListAdapter extends BaseAdapter
 
     public View getViewAt(View view, int i)
     {
-        ((TextView) view.findViewById(R.id.text)).setText((String) getItem(i));
+        TemplateItem item = (TemplateItem) getItem(i);
+        TextView text = (TextView) view.findViewById(R.id.text);
+
+        if (item.isJson)
+            text.setTextColor(Color.GREEN);
+        else if (item.isShortcut)
+        {
+            text.setMaxLines(1);
+            text.setTextColor(Color.CYAN);
+            text.setEllipsize(TextUtils.TruncateAt.END);
+        }
+
+        text.setText(item.template);
+
         return view;
     }
 }

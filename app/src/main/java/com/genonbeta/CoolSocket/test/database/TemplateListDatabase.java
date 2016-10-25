@@ -134,7 +134,7 @@ public class TemplateListDatabase extends SQLiteOpenHelper
         return moveToFirst;
     }
 
-    public boolean isShortcut(String text)
+    public static boolean isShortcut(String text)
     {
         return text.startsWith(PREFIX_SHORTCUT);
     }

@@ -18,6 +18,7 @@ import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.adapter.TemplateListAdapter;
 import com.genonbeta.CoolSocket.test.dialog.EditTemplateDialog;
 import com.genonbeta.CoolSocket.test.dialog.NewTemplateDialog;
+import com.genonbeta.CoolSocket.test.helper.TemplateItem;
 
 import java.util.HashSet;
 
@@ -61,12 +62,12 @@ public class TemplateListFragment extends ListFragment
 
         if (this.mIsMultiscreen)
         {
-            getMessengerFragment().setMessageBox((String) this.mAdapter.getItem(position), true);
+            getMessengerFragment().setMessageBox(((TemplateItem) this.mAdapter.getItem(position)).templateOriginal, true);
             return;
         }
 
         Intent intent = new Intent();
-        intent.putExtra(MessengerFragment.EXTRA_MESSAGE, (String) this.mAdapter.getItem(position));
+        intent.putExtra(MessengerFragment.EXTRA_MESSAGE, ((TemplateItem) this.mAdapter.getItem(position)).templateOriginal);
 
         if (getActivity().getParent() != null)
             getActivity().getParent().setResult(Activity.RESULT_OK, intent);
@@ -87,20 +88,16 @@ public class TemplateListFragment extends ListFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
     {
         super.onCreateOptionsMenu(menu, menuInflater);
-        menu.add(0, 0, 0, "Add Template").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, 0, 0, "Add").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem)
     {
-        if ("Add Template".equals(menuItem.getTitle()))
+        if ("Add".equals(menuItem.getTitle()))
         {
             NewTemplateDialog newTemplateDialog = new NewTemplateDialog(getActivity(), TemplateListFragment.this.mAdapter.getDatabase(), TemplateListFragment.this.mPositive, (OnClickListener) null);
             newTemplateDialog.show();
-            return true;
-        }
-        else if ("Remove".equals(menuItem.getTitle()))
-        {
             return true;
         }
 
@@ -166,7 +163,7 @@ public class TemplateListFragment extends ListFragment
         @Override
         public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
         {
-            String str = (String) TemplateListFragment.this.mAdapter.getItem(position);
+            String str = ((TemplateItem) TemplateListFragment.this.mAdapter.getItem(position)).templateOriginal;
 
             if (isSelected)
                 this.mCheckedList.add(str);
