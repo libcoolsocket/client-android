@@ -93,10 +93,8 @@ public class TemplateListAdapter extends BaseAdapter
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
     {
-        if (view == null)
-            view = LayoutInflater.from(this.mContext).inflate(R.layout.list, viewGroup, false);
-
-        return getViewAt(view, i);
+        // Creating new instance otherwise in can't revert changes
+        return getViewAt(LayoutInflater.from(this.mContext).inflate(R.layout.list, viewGroup, false), i);
     }
 
     public View getViewAt(View view, int i)
@@ -111,6 +109,10 @@ public class TemplateListAdapter extends BaseAdapter
             text.setMaxLines(1);
             text.setTextColor(Color.CYAN);
             text.setEllipsize(TextUtils.TruncateAt.END);
+        }
+        else
+        {
+
         }
 
         text.setText(item.template);
