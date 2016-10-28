@@ -47,16 +47,17 @@ import com.genonbeta.CoolSocket.test.database.TemplateListDatabase;
 import com.genonbeta.CoolSocket.test.dialog.JsonEditorDialog;
 import com.genonbeta.CoolSocket.test.helper.MessageItem;
 import com.genonbeta.CoolSocket.test.helper.RemoteServer;
+import com.github.kevinsawicki.http.HttpRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MessengerFragment extends Fragment
 {
@@ -69,6 +70,7 @@ public class MessengerFragment extends Fragment
 
     public static final int REQUEST_CHOOSE_PEER = 15;
     public static final int REQUEST_USE_TEMPLATE = 30;
+
     IntentFilter mSMSIntentFilter = new IntentFilter(ACTION_SMS_RECEIVED);
     private Cool mCool = new Cool();
     private MessageListAdapter mAdapter;
@@ -80,14 +82,14 @@ public class MessengerFragment extends Fragment
     private EditText mEditTextServer;
     private ListView mListView;
     private MenuItem mJsonMenu;
-    private View mSeperator;
     private SharedPreferences mPreferences;
     private JSONObject mPendingJson;
     private boolean mIsMultiscreen = false;
     private boolean mJsonEnabled = false;
-    private ArrayList<MessageItem> mList = new ArrayList<MessageItem>();
+    private ArrayList<MessageItem> mList = new ArrayList<>();
     private MessageSenderHandler mSenderHandler = new MessageSenderHandler();
     private SMSReceiver mSMSReceiver = new SMSReceiver();
+    private RemoteSynchronous mSynchronous = new RemoteSynchronous();
 
     @Override
     public void onCreate(Bundle bundle)
@@ -116,7 +118,6 @@ public class MessengerFragment extends Fragment
         this.mEditTextPort = (EditText) inflate.findViewById(R.id.mainPort);
         this.mButton = (Button) inflate.findViewById(R.id.mainButton);
         this.mListView = (ListView) inflate.findViewById(R.id.mainListView);
-        this.mSeperator = inflate.findViewById(R.id.seperator);
         this.mAdapter = new MessageListAdapter(getActivity(), this.mList);
         this.mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.mBadgeDatabase = new OldBadgeDatabase(getActivity());
@@ -332,6 +333,8 @@ public class MessengerFragment extends Fragment
         }
 
         edit.commit();
+
+        this.mSynchronous.sendKillSignal();
     }
 
     @Override
@@ -339,6 +342,12 @@ public class MessengerFragment extends Fragment
     {
         super.onResume();
         getActivity().registerReceiver(mSMSReceiver, mSMSIntentFilter);
+
+        if (Thread.State.TERMINATED.equals(this.mSynchronous.getState()))
+            this.mSynchronous = new RemoteSynchronous();
+
+        if (!this.mSynchronous.isAlive())
+            this.mSynchronous.start();
     }
 
     @Override
@@ -369,6 +378,7 @@ public class MessengerFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
+
         this.mCool.stop();
     }
 
@@ -768,6 +778,64 @@ public class MessengerFragment extends Fragment
         {
             showToast("Someting went wrong while sending your message: (error) " + exception, Toast.LENGTH_SHORT);
             addMessageUI("Send failed", "@" + exception, false, true);
+        }
+    }
+
+    protected class RemoteSynchronous extends Thread
+    {
+        private boolean mKillSignal = false;
+
+        public void sendKillSignal()
+        {
+            this.mKillSignal = true;
+        }
+
+        @Override
+        public void run()
+        {
+            super.run();
+
+            while (!this.mKillSignal)
+            {
+                if (MessengerFragment.this.mEditText == null)
+                    continue;
+
+                try
+                {
+                    sleep(2000);
+
+                    String serverAddress = MessengerFragment.this.mEditTextServer.getText().toString();
+
+                    if (TemplateListDatabase.isShortcut(serverAddress))
+                        serverAddress = mTemplateDatabase.getShortcut(serverAddress);
+
+
+                    if (serverAddress.startsWith("http://") || serverAddress.startsWith("https://"))
+                    {
+                        RemoteServer server = new RemoteServer(serverAddress);
+
+                        JSONObject resultIndex = new JSONObject(server.connect(null, null));
+
+                        if (resultIndex.length() > 0)
+                        {
+                            Iterator<String> keys = resultIndex.keys();
+
+                            while(keys.hasNext())
+                            {
+                                String key = keys.next();
+                                int sepPos = key.indexOf(":");
+
+                                try
+                                {
+                                    addMessageUI((sepPos != -1) ? key.substring(++sepPos) : key, new JSONObject(resultIndex.getString(key)).toString(1), true, false);
+                                } catch (JSONException e) {
+                                    addMessageUI(key, e.toString(), true, true);
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {}
+            }
         }
     }
 }
