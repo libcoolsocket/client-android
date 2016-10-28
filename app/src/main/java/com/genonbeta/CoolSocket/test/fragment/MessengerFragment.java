@@ -96,6 +96,12 @@ public class MessengerFragment extends Fragment
     {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
+
+        if (Thread.State.TERMINATED.equals(this.mSynchronous.getState()))
+            this.mSynchronous = new RemoteSynchronous();
+
+        if (!this.mSynchronous.isAlive())
+            this.mSynchronous.start();
     }
 
     @Override
@@ -333,8 +339,6 @@ public class MessengerFragment extends Fragment
         }
 
         edit.commit();
-
-        this.mSynchronous.sendKillSignal();
     }
 
     @Override
@@ -342,12 +346,6 @@ public class MessengerFragment extends Fragment
     {
         super.onResume();
         getActivity().registerReceiver(mSMSReceiver, mSMSIntentFilter);
-
-        if (Thread.State.TERMINATED.equals(this.mSynchronous.getState()))
-            this.mSynchronous = new RemoteSynchronous();
-
-        if (!this.mSynchronous.isAlive())
-            this.mSynchronous.start();
     }
 
     @Override
@@ -380,6 +378,7 @@ public class MessengerFragment extends Fragment
         super.onDestroy();
 
         this.mCool.stop();
+        this.mSynchronous.sendKillSignal();
     }
 
     public void addMessage(String client, String message, boolean isReceived, boolean isError)
@@ -795,14 +794,16 @@ public class MessengerFragment extends Fragment
         {
             super.run();
 
+            Log.d(this.getClass().getName(), "Started/"+ this.getId());
+
             while (!this.mKillSignal)
             {
-                if (MessengerFragment.this.mEditText == null)
-                    continue;
-
                 try
                 {
                     sleep(2000);
+
+                    if (MessengerFragment.this.mEditText == null)
+                        continue;
 
                     String serverAddress = MessengerFragment.this.mEditTextServer.getText().toString();
 
@@ -827,15 +828,17 @@ public class MessengerFragment extends Fragment
 
                                 try
                                 {
-                                    addMessageUI((sepPos != -1) ? key.substring(++sepPos) : key, new JSONObject(resultIndex.getString(key)).toString(1), true, false);
+                                    addMessageUI((sepPos != -1) ? key.substring(++sepPos) : key, new JSONObject(resultIndex.getString(key)).toString(2), true, false);
                                 } catch (JSONException e) {
-                                    addMessageUI(key, e.toString(), true, true);
+                                    addMessageUI(key, resultIndex.getString(key), true, false);
                                 }
                             }
                         }
                     }
                 } catch (Exception e) {}
             }
+
+            Log.d(this.getClass().getName(), "Exiting/"+ this.getId());
         }
     }
 }
