@@ -1,6 +1,7 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,9 @@ public class MessageListAdapter extends BaseAdapter
         this.mContext = context;
         this.mList = arrayList;
 
-        this.receivedColor = context.getResources().getColor(R.color.receivedMessage);
-        this.sentColor = context.getResources().getColor(R.color.sentMessage);
-        this.errorColor = context.getResources().getColor(R.color.errorMessage);
+        this.receivedColor = ContextCompat.getColor(context, R.color.receivedMessage);
+        this.sentColor = ContextCompat.getColor(context, R.color.sentMessage);
+        this.errorColor = ContextCompat.getColor(context, R.color.errorMessage);
     }
 
     @Override
@@ -66,12 +67,6 @@ public class MessageListAdapter extends BaseAdapter
         TextView textView1 = (TextView) view.findViewById(R.id.list_text);
         TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
         MessageItem messageItem = (MessageItem) getItem(i);
-
-        if (!messageItem.message.equals(textView2.getText().toString()))
-        {
-            AnimationSet set = GAnimater.getAnimation(GAnimater.APPEAR);
-            view.setAnimation(set);
-        }
 
         String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
 

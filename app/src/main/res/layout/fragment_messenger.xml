@@ -1,75 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_home_rootlayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/mainLinearLayout"
+        android:id="@+id/activity_home_form_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+        android:background="@color/textBoxColor"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/mainServer"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="35.0"
-            android:gravity="center"
-            android:hint="server"
-            android:inputType="textNoSuggestions|textShortMessage"
-            android:singleLine="true"
-            android:text="0.0.0.0"
-            />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="15dp"
+            android:paddingRight="5dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <EditText
-            android:id="@+id/mainPort"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="14.0"
-            android:gravity="center"
-            android:hint="port"
-            android:inputType="number"
-            android:singleLine="true"
-            android:text="3000"
-            />
+            <EditText
+                android:id="@+id/fragment_messenger_server_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="35.0"
+                android:gravity="center"
+                android:hint="enter server..."
+                android:inputType="textNoSuggestions|textShortMessage"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="0.0.0.0"
+                android:background="#00000000"
+                />
 
-        <EditText
-            android:id="@+id/mainEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="30.0"
-            android:hint="Enter text..."
-            android:inputType="textMultiLine"
-            />
+            <EditText
+                android:id="@+id/fragment_messenger_port_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="14.0"
+                android:gravity="center"
+                android:hint="enter port..."
+                android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="3000"
+                android:background="#00000000"
+                />
+
+            <EditText
+                android:id="@+id/fragment_messenger_message_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="30.0"
+                android:hint="Enter text..."
+                android:inputType="textMultiLine"
+                android:background="#00000000"
+                />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/mainButton"
+            android:id="@+id/fragment_messenger_send_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/send_button_drawable"
-            android:visibility="gone"/>
+            android:background="@drawable/send_button_drawable"/>
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/seperator"
-        android:layout_width="wrap_content"
-        android:layout_height="2dp"
-        android:layout_above="@+id/mainLinearLayout"
-        android:background="@color/seperatorColor"
-        />
 
     <ListView
-        android:id="@+id/mainListView"
+        android:id="@+id/fragment_messenger_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/seperator"
+        android:layout_above="@id/activity_home_form_layout"
         android:layout_alignParentTop="true"
         android:divider="@color/colorPrimaryDark"
+        android:stackFromBottom="true"
         />
 
 </RelativeLayout>

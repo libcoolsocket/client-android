@@ -119,32 +119,26 @@ public class MessengerFragment extends Fragment
         View inflate = layoutInflater.inflate(R.layout.fragment_messenger, viewGroup, false);
 
         this.mCool.start();
-        this.mEditText = (EditText) inflate.findViewById(R.id.mainEditText);
-        this.mEditTextServer = (EditText) inflate.findViewById(R.id.mainServer);
-        this.mEditTextPort = (EditText) inflate.findViewById(R.id.mainPort);
-        this.mButton = (Button) inflate.findViewById(R.id.mainButton);
-        this.mListView = (ListView) inflate.findViewById(R.id.mainListView);
+        this.mEditText = (EditText) inflate.findViewById(R.id.fragment_messenger_message_text);
+        this.mEditTextServer = (EditText) inflate.findViewById(R.id.fragment_messenger_server_text);
+        this.mEditTextPort = (EditText) inflate.findViewById(R.id.fragment_messenger_port_text);
+        this.mButton = (Button) inflate.findViewById(R.id.fragment_messenger_send_button);
+        this.mListView = (ListView) inflate.findViewById(R.id.fragment_messenger_listview);
         this.mAdapter = new MessageListAdapter(getActivity(), this.mList);
         this.mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.mBadgeDatabase = new OldBadgeDatabase(getActivity());
         this.mTemplateDatabase = new TemplateListDatabase(getActivity());
 
-        this.mEditText.setOnFocusChangeListener(new OnFocusChangeListener()
-                                                {
-                                                    @Override
-                                                    public void onFocusChange(View view, boolean isFocused)
-                                                    {
-                                                        changeUtilities(isFocused);
-                                                    }
-                                                }
-        );
 
         this.mButton.setOnClickListener(new View.OnClickListener()
                                         {
                                             @Override
                                             public void onClick(View view)
                                             {
-                                                sendMessage();
+                                                if (mEditText.getVisibility() == View.GONE)
+                                                    changeUtilities(true);
+                                                else
+                                                    sendMessage();
                                             }
                                         }
         );
@@ -426,26 +420,21 @@ public class MessengerFragment extends Fragment
 
             this.mEditTextServer.setVisibility(View.GONE);
             this.mEditTextPort.setVisibility(View.GONE);
-            this.mButton.setVisibility(View.VISIBLE);
 
-            this.mButton.setAnimation(fadeIn);
-
-            this.mEditText.setSingleLine(false);
+            this.mEditText.setVisibility(View.VISIBLE);
+            this.mEditText.setAnimation(fadeIn);
 
             return;
         }
 
-        this.mButton.setAnimation(fadeOut);
+        this.mEditText.setAnimation(fadeOut);
 
         this.mEditTextServer.setVisibility(View.VISIBLE);
         this.mEditTextPort.setVisibility(View.VISIBLE);
-        this.mButton.setVisibility(View.GONE);
+        this.mEditText.setVisibility(View.GONE);
 
         this.mEditTextServer.setAnimation(fadeIn);
         this.mEditTextPort.setAnimation(fadeIn);
-
-        this.mEditText.setSingleLine(true);
-        this.mEditText.clearFocus();
     }
 
     public boolean jsonPusher(String text)
@@ -655,7 +644,7 @@ public class MessengerFragment extends Fragment
     public boolean setMode(boolean mode)
     {
         this.mJsonEnabled = mode;
-        this.mEditText.setHint(this.mJsonEnabled ? "JSON" : "Text");
+        this.mEditText.setHint(this.mJsonEnabled ? "enter json here..." : "enter text here...");
 
         return this.mJsonEnabled;
     }
