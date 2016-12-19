@@ -49,8 +49,6 @@ public class TemplateListAdapter extends BaseAdapter
                 JSONObject object = new JSONObject(template);
 
                 item.isJson = true;
-                item.template = object.toString(1);
-                item.template = item.template.substring(2, item.template.length() - 2);
             } catch (JSONException e)
             {
                 e.printStackTrace();
