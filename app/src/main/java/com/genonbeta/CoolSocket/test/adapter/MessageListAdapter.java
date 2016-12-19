@@ -78,7 +78,6 @@ public class MessageListAdapter extends BaseAdapter
                 str += " @ " + device.deviceName;
         }
 
-
         textView1.setTextColor((messageItem.isError) ? this.errorColor : ((messageItem.isReceived) ? this.receivedColor : this.sentColor));
 
         textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
