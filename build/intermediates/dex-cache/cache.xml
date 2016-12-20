@@ -124,7 +124,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="b3656a99f0c5c37633a1bb9aef0c76a313a148b6">
+        sha1="28f4c6d288b22a9bbdef1a9bb4c2d81d5e594499">
         <dex dex="/home/veli/Projects/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/instant-run_bb86e3765da31ab61bea9ce517ea2f562c1da281.jar" />
     </item>
     <item
@@ -142,7 +142,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.3"
-        sha1="540473d4d520e4f789dd26487a604cebea74f393">
+        sha1="994fdf0849c1d9c4bdf9e883a44021e0465ba510">
         <dex dex="/home/veli/Projects/CoolSocket-Client/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_131012d456e43d072c7d5d0fa5ebbf121cb0ba7b.jar" />
     </item>
     <item
