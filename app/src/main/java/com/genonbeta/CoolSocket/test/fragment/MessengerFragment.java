@@ -129,7 +129,6 @@ public class MessengerFragment extends Fragment
         this.mBadgeDatabase = new OldBadgeDatabase(getActivity());
         this.mTemplateDatabase = new TemplateListDatabase(getActivity());
 
-
         this.mButton.setOnClickListener(new View.OnClickListener()
                                         {
                                             @Override
@@ -423,6 +422,7 @@ public class MessengerFragment extends Fragment
 
             this.mEditText.setVisibility(View.VISIBLE);
             this.mEditText.setAnimation(fadeIn);
+            this.mEditText.requestFocus();
 
             return;
         }
@@ -435,6 +435,8 @@ public class MessengerFragment extends Fragment
 
         this.mEditTextServer.setAnimation(fadeIn);
         this.mEditTextPort.setAnimation(fadeIn);
+
+        this.mEditTextServer.requestFocus();
     }
 
     public boolean jsonPusher(String text)

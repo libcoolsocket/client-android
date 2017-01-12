@@ -50,7 +50,6 @@ public class TemplateListFragment extends ListFragment
         setHasOptionsMenu(true);
         setEmptyText("No template");
 
-        getListView().setPadding(15, 0, 15, 0);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         getListView().setMultiChoiceModeListener(this.mChoiceListener);
     }
