@@ -1,6 +1,8 @@
 package com.genonbeta.CoolSocket.test.fragment;
 
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -139,8 +141,7 @@ public class MessengerFragment extends Fragment
                                                 else
                                                     sendMessage();
                                             }
-                                        }
-        );
+                                        });
 
         this.mButton.setOnLongClickListener(new OnLongClickListener()
                                             {
@@ -150,8 +151,7 @@ public class MessengerFragment extends Fragment
                                                     changeUtilities(false);
                                                     return true;
                                                 }
-                                            }
-        );
+                                            });
 
         this.mListView.setOnItemClickListener(new OnItemClickListener()
                                               {
@@ -160,8 +160,21 @@ public class MessengerFragment extends Fragment
                                                   {
                                                       setMessageBox(mList.get(i).message, true);
                                                   }
-                                              }
-        );
+                                              });
+
+        this.mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                ClipboardManager cMan = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                cMan.setPrimaryClip(ClipData.newPlainText("copiedText", mList.get(i).message));
+
+                Toast.makeText(getActivity(), "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
 
         this.mBadgeDatabase.getList(this.mList);
         this.mListView.setAdapter(this.mAdapter);
@@ -173,7 +186,6 @@ public class MessengerFragment extends Fragment
         try
         {
             this.mPendingJson = new JSONObject(this.mPreferences.getString("lastJsonIndex", "{}"));
-            ;
         } catch (JSONException e)
         {
             this.mPendingJson = new JSONObject();
