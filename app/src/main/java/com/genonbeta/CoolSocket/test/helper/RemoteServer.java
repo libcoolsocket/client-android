@@ -7,33 +7,33 @@ import java.net.URLEncoder;
 
 public class RemoteServer
 {
-    private String mConnection;
+	private String mConnection;
 
-    public RemoteServer(String serverUri)
-    {
-        this.mConnection = serverUri;
-    }
+	public RemoteServer(String serverUri)
+	{
+		this.mConnection = serverUri;
+	}
 
-    public String connect(String postKey, String postValue) throws IOException
-    {
-        HttpRequest request = HttpRequest.get(this.mConnection);
-        StringBuilder output = new StringBuilder();
+	public String connect(String postKey, String postValue) throws IOException
+	{
+		HttpRequest request = HttpRequest.get(this.mConnection);
+		StringBuilder output = new StringBuilder();
 
-        if (postKey != null && postValue != null)
-            request.send(postKey + "=" + URLEncoder.encode(postValue, "UTF-8")).receive(output);
-        else
-            request.receive(output);
+		if (postKey != null && postValue != null)
+			request.send(postKey + "=" + URLEncoder.encode(postValue, "UTF-8")).receive(output);
+		else
+			request.receive(output);
 
-        return output.toString();
-    }
+		return output.toString();
+	}
 
-    public String getConnectionAddress()
-    {
-        return this.mConnection;
-    }
+	public String getConnectionAddress()
+	{
+		return this.mConnection;
+	}
 
-    public void setConnection(String remoteAddress)
-    {
-        this.mConnection = remoteAddress;
-    }
+	public void setConnection(String remoteAddress)
+	{
+		this.mConnection = remoteAddress;
+	}
 }

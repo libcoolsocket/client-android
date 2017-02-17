@@ -7,11 +7,13 @@
     android:padding="@dimen/abc_dialog_padding_material">
 
     <EditText
-        android:id="@+id/layout_new_template_edit_text"
+        android:id="@+id/layout_server_action_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         />
 
 </RelativeLayout>

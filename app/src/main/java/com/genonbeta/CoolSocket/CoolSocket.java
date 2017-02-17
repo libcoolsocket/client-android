@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 abstract public class CoolSocket
 {
@@ -47,27 +48,31 @@ abstract public class CoolSocket
         return new PrintWriter(new BufferedOutputStream(outputStream));
     }
 
-    public static ByteArrayOutputStream readStream(InputStream inputStreamIns) throws IOException
-    {
+    public static ByteArrayOutputStream readStream(InputStream inputStreamIns, int timeout) throws IOException, TimeoutException
+	{
         BufferedInputStream inputStream = new BufferedInputStream(inputStreamIns);
         ByteArrayOutputStream inputStreamResult = new ByteArrayOutputStream();
 
         byte[] buffer = new byte[8096];
         int len = 0;
+		long calculatedTimeout = timeout != NO_TIMEOUT ? System.currentTimeMillis() + timeout : NO_TIMEOUT;
 
         do
         {
             if ((len = inputStream.read(buffer)) > 0)
                 inputStreamResult.write(buffer, 0, len);
+
+			if (calculatedTimeout != NO_TIMEOUT && System.currentTimeMillis() > calculatedTimeout)
+				throw new TimeoutException("Read timed out!");
         }
         while (!inputStreamResult.toString().endsWith(END_SEQUENCE));
 
         return inputStreamResult;
     }
 
-    public static String readStreamMessage(InputStream inputStream) throws IOException
-    {
-        return readStreamMessage(readStream(inputStream));
+    public static String readStreamMessage(InputStream inputStream, int timeout) throws IOException, TimeoutException
+	{
+        return readStreamMessage(readStream(inputStream, timeout));
     }
 
     public static String readStreamMessage(ByteArrayOutputStream outputStream)
@@ -114,6 +119,11 @@ abstract public class CoolSocket
     {
         return this.mSocketRunnable;
     }
+
+	public int getSocketTimeout()
+	{
+		return this.mSocketTimeout;
+	}
 
     protected Thread getServerThread()
     {

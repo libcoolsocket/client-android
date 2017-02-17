@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CoolSocket</string>
+    <string name="edit_template">Edit template</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="error_template_empty">Template can\'t be empty</string>
+    <string name="msg_success_template_add">Added to list</string>
+    <string name="title_template_add">Add new template</string>
+    <string name="add">Add</string>
+    <string name="error_send_message">Message couldn\'t be delivered</string>
+    <string name="error_send_message_internal">Send error: %s</string>
+    <string name="msg_success_json_register">JSON data is registered. Holding index %d</string>
+    <string name="error_json_parse">JSON cannot be parsed</string>
+    <string name="info_mode_json">enter json here…</string>
+    <string name="info_mode_text">enter text here…</string>
+    <string name="menu_title_json_editor">%d JSON</string>
+    <string name="error_send_msg_connection">Something went wrong while sending your message: (error) %s</string>
+    <string name="error_title_send_msg">Send failed</string>
+    <string name="msg_success_template_load">%d template(s) added</string>
+    <string name="msg_success_json_register_new" formatted="false">holding %d, key \'%s\', value \'%s\'</string>
+    <string name="title_mode_json">JSON Mode</string>
+    <string name="title_mode_text">Text Mode</string>
+    <string name="msg_success_clipboard_copy">Text copied to clipboard</string>
+    <string name="pair_finder">Pair finder</string>
+    <string name="template_list">Template list</string>
+    <string name="json">JSON</string>
+    <string name="clear_list">Clear list</string>
+    <string name="about">About</string>
+    <string name="close">Close</string>
+    <string name="title_about">About CoolSocket</string>
+    <string name="msg_about_sentence_one">This application is developed to test Genonbeta CoolSocket API</string>
+    <string name="msg_about_sentence_two">CoolSocket API provides fast communication mechanism</string>
+    <string name="msg_about_sentence_three">This CoolSocket application is developed by love and with a couple of developer</string>
+    <string name="msg_pairlist_no_device">No pair was found</string>
+    <string name="scan_peers">Scan peers</string>
+    <string name="msg_templatelist_no_template">No template</string>
+    <string name="add_template">Add template</string>
+    <string name="edit_templates">Edit templates</string>
+    <string name="delete_template">Delete template</string>
+    <string name="msg_edit_template_selected_count">%d selected</string>
+    <string name="error_template_exist">Same template is already exists</string>
+    <string name="msg_scan_start">Scan started</string>
+    <string name="msg_scan_running">Still scanning. When it ends, list will be refreshed</string>
+    <string name="msg_json_apply_format">enter as \'key value\'</string>
+    <string name="title_json_editor">JSON Index</string>
+    <string name="msg_json_editor_list_empty">It\'s empty</string>
+    <string name="json_editor_button_remove_all">Remove all</string>
+    <string name="add_server">Add server</string>
+    <string name="edit_server">Edit server</string>
+    <string name="error_server_exist">The server you entered is already defined in the list</string>
+    <string name="error_server_empty">Server address can\'t be empty</string>
+    <string name="delete_server">Delete server</string>
+    <string name="edit_servers">Edit servers</string>
+    <string name="enter_server">enter server…</string>
+    <string name="enter_port">enter port…</string>
 </resources>

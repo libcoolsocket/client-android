@@ -7,8 +7,8 @@ package com.genonbeta.CoolSocket.test.helper;
 
 public class TemplateItem
 {
-    public boolean isJson = false;
-    public boolean isShortcut = false;
-    public String template = null;
-    public String templateOriginal = null;
+	public boolean isJson = false;
+	public boolean isShortcut = false;
+	public String template = null;
+	public String templateOriginal = null;
 }

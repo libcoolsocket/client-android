@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_json_editor"
+        android:title="@string/json"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_clear_list"
+        android:icon="@drawable/ic_clear_all_white_24dp"
+        android:title="@string/clear_list"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_pair_finder"
+        android:title="@string/pair_finder" />
+
+    <item
+        android:id="@+id/menu_template_list"
+        android:title="@string/template_list" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/about" />
+
+</menu>

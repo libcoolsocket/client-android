@@ -2,11 +2,11 @@
 <resources>
     <color name="basicColor">#202020</color>
     <color name="colorPrimary">#292929</color>
-    <color name="colorPrimaryDark">@color/basicColor</color>
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="windowBackground">@color/basicColor</color>
     <color name="colorAccent">#4CAF50</color>
     <color name="separatorColor">#80292929</color>
-    <color name="actionModeBackground">@color/basicColor</color>
+    <color name="actionModeBackground">@color/colorPrimary</color>
     <color name="navigationColor">#000000</color>
     <color name="textBoxColor">@color/colorPrimary</color>
     <color name="itemBackground">#4e4e4e</color>

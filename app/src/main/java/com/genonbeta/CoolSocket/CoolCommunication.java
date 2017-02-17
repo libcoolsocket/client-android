@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.concurrent.TimeoutException;
 
 public abstract class CoolCommunication extends CoolSocket
 {
@@ -27,8 +28,8 @@ public abstract class CoolCommunication extends CoolSocket
     {
         try
         {
-            PrintWriter writer = this.getStreamWriter(socket.getOutputStream());
-            String message = this.readStreamMessage(socket.getInputStream());
+            PrintWriter writer = getStreamWriter(socket.getOutputStream());
+            String message = readStreamMessage(socket.getInputStream(), getSocketTimeout());
 
             this.onMessage(socket, message, writer, socket.getInetAddress().isAnyLocalAddress() ? "127.0.0.1" : socket.getInetAddress().getHostAddress());
 
@@ -39,8 +40,11 @@ public abstract class CoolCommunication extends CoolSocket
         } catch (IOException e)
         {
             this.onError(e);
-        }
-    }
+        } catch (TimeoutException e)
+		{
+			this.onError(e);
+		}
+	}
 
     abstract protected void onMessage(Socket socket, String message, PrintWriter writer, String clientIp);
 
@@ -115,7 +119,7 @@ public abstract class CoolCommunication extends CoolSocket
                     this.mProcess.waitForResponse();
 
                     if (this.mProcess.getResponseHandler() != null)
-                        this.mProcess.getResponseHandler().onResponseAvaiable(this.mProcess.getResponse());
+                        this.mProcess.getResponseHandler().onResponseAvailable(this.mProcess.getResponse());
 
                     return true;
                 } catch (IOException e)
@@ -241,13 +245,16 @@ public abstract class CoolCommunication extends CoolSocket
 
                     try
                     {
-                        this.setResponseReceived(readStreamMessage(this.getSocket().getInputStream()));
+                        this.setResponseReceived(readStreamMessage(this.getSocket().getInputStream(), getSocketTimeout()));
                     } catch (IOException e)
                     {
                         return false;
-                    }
+                    } catch (TimeoutException e)
+					{
+						return false;
+					}
 
-                    return true;
+					return true;
                 }
 
                 return false;
@@ -283,7 +290,7 @@ public abstract class CoolCommunication extends CoolSocket
             {
             }
 
-            public void onResponseAvaiable(String response)
+            public void onResponseAvailable(String response)
             {
             }
 

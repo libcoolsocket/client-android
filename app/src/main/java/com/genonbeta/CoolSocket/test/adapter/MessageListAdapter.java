@@ -1,80 +1,60 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
+import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
-import com.genonbeta.CoolSocket.test.helper.GAnimater;
-import com.genonbeta.CoolSocket.test.helper.MessageItem;
-import com.genonbeta.CoolSocket.test.helper.PairListHelper;
+import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.android.database.CursorItem;
+import com.genonbeta.android.database.SQLQuery;
+import com.genonbeta.android.database.SQLiteDatabase;
+import com.genonbeta.android.database.adapter.AbstractDatabaseAdapter;
 
-import java.util.ArrayList;
-
-public class MessageListAdapter extends BaseAdapter
+public class MessageListAdapter extends AbstractDatabaseAdapter
 {
-    private Context mContext;
-    private ArrayList<MessageItem> mList;
+	private int receivedColor = 0;
+	private int sentColor = 0;
+	private int errorColor = 0;
 
-    private int receivedColor = 0;
-    private int sentColor = 0;
-    private int errorColor = 0;
+	public MessageListAdapter(Context context, SQLiteDatabase db)
+	{
+		super(context, db, new SQLQuery.Select(MainDatabase.TABLE_MESSAGE));
 
-    public MessageListAdapter(Context context, ArrayList<MessageItem> arrayList)
-    {
-        this.mContext = context;
-        this.mList = arrayList;
+		this.receivedColor = ContextCompat.getColor(context, R.color.receivedMessage);
+		this.sentColor = ContextCompat.getColor(context, R.color.sentMessage);
+		this.errorColor = ContextCompat.getColor(context, R.color.errorMessage);
+	}
 
-        this.receivedColor = ContextCompat.getColor(context, R.color.receivedMessage);
-        this.sentColor = ContextCompat.getColor(context, R.color.sentMessage);
-        this.errorColor = ContextCompat.getColor(context, R.color.errorMessage);
-    }
+	@Override
+	public View getView(int i, View view, ViewGroup viewGroup)
+	{
+		if (view == null)
+			view = getLayoutInflater().inflate(R.layout.list_message, viewGroup, false);
 
-    @Override
-    public int getCount()
-    {
-        return this.mList.size();
-    }
+		TextView textView1 = (TextView) view.findViewById(R.id.list_text);
+		TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
+		CursorItem item = (CursorItem) getItem(i);
 
-    @Override
-    public Object getItem(int i)
-    {
-        return this.mList.get(i);
-    }
+		String client = item.getString(MainDatabase.COLUMN_MESSAGE_CLIENT);
+		String message = item.getString(MainDatabase.COLUMN_MESSAGE_MESSAGE);
+		boolean isReceived = item.getInt(MainDatabase.COLUMN_MESSAGE_ISRECEIVED) == 1;
+		boolean isError = item.getInt(MainDatabase.COLUMN_MESSAGE_ISERROR) == 1;
 
-    @Override
-    public long getItemId(int i)
-    {
-        return (long) 0;
-    }
+		String str = (client == null || client.equals("") || client.equals("::1")) ? "localhost" : client;
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup)
-    {
-        if (view == null)
-            view = LayoutInflater.from(this.mContext).inflate(R.layout.list_message, viewGroup, false);
+		textView1.setTextColor((isError) ? this.errorColor : ((isReceived) ? this.receivedColor : this.sentColor));
 
-        return getViewAt(view, i);
-    }
+		textView1.setText(str);
+		textView2.setText(message);
 
-    public View getViewAt(View view, int i)
-    {
-        TextView textView1 = (TextView) view.findViewById(R.id.list_text);
-        TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
-        MessageItem messageItem = (MessageItem) getItem(i);
+		textView1.setGravity(isReceived ? Gravity.START : Gravity.END);
+		textView2.setGravity(isReceived ? Gravity.START : Gravity.END);
 
-        String str = (messageItem.client == null || messageItem.client.equals("") || messageItem.client.equals("::1")) ? "localhost" : messageItem.client;
-
-        textView1.setTextColor((messageItem.isError) ? this.errorColor : ((messageItem.isReceived) ? this.receivedColor : this.sentColor));
-
-        textView1.setText(((messageItem.isReceived) ? "↓" : "↑") + " " + str);
-        textView2.setText(messageItem.message);
-
-        return view;
-    }
+		return view;
+	}
 }

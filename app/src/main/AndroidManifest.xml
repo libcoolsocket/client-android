@@ -34,11 +34,9 @@
         </activity>
         <activity
             android:name=".PairFinderActivity"
-            android:label="Pair Finder"
-            android:parentActivityName=".HomeActivity"/>
+            android:label="@string/pair_finder"/>
         <activity
             android:name=".TemplateListActivity"
-            android:label="Template List"
-            android:parentActivityName=".HomeActivity"/>
+            android:label="@string/template_list"/>
     </application>
 </manifest>

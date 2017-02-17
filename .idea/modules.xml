@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CoolSocket-Client.iml" filepath="$PROJECT_DIR$/CoolSocket-Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gdatabase/gdatabase.iml" filepath="$PROJECT_DIR$/gdatabase/gdatabase.iml" />
     </modules>
   </component>
 </project>

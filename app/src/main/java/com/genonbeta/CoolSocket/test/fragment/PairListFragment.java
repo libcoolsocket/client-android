@@ -1,113 +1,210 @@
 package com.genonbeta.CoolSocket.test.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.IntentFilter;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.genonbeta.CoolSocket.test.HomeActivity;
+import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.adapter.PairListAdapter;
+import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.dialog.ServerActionDialog;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
-import com.genonbeta.core.content.Intent;
+import com.genonbeta.android.database.util.QueryLoader;
+
+import java.net.InetAddress;
+import java.util.HashSet;
 
 public class PairListFragment extends ListFragment
 {
-    private PairListAdapter mAdapter;
-    private boolean mIsMultiscreen = false;
-    private IntentFilter mFilter = new IntentFilter();
-    private BroadcastReceiver mReceiver = new BroadcastReceiver()
-    {
-        @Override
-        public void onReceive(Context context, android.content.Intent intent)
-        {
-            PairListFragment.this.mAdapter.notifyDataSetChanged();
-        }
-    };
+	private static final int TASK_LOAD = 1;
 
-    @Override
-    public void onActivityCreated(Bundle bundle)
-    {
-        super.onActivityCreated(bundle);
+	private boolean mIsMultiScreen = false;
+	private PairListAdapter mAdapter;
+	private MainDatabase mDatabase;
+	private ChoiceListener mChoiceListener = new ChoiceListener();
+	private DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener()
+	{
+		@Override
+		public void onClick(DialogInterface dialogInterface, int i)
+		{
+			refreshList();
+		}
+	};
 
-        this.mAdapter = new PairListAdapter(getActivity());
-        this.mFilter.addAction(Intent.ACTION_NOTIFY_CHANGES);
+	@Override
+	public void onActivityCreated(Bundle bundle)
+	{
+		super.onActivityCreated(bundle);
 
-        if (getActivity() instanceof HomeActivity)
-            this.mIsMultiscreen = ((HomeActivity) getActivity()).isMultiscreen();
+		mDatabase = new MainDatabase(getActivity());
+		mAdapter = new PairListAdapter(getActivity(), mDatabase);
 
-        this.setListAdapter(this.mAdapter);
-        this.setHasOptionsMenu(true);
-        this.setEmptyText("No pair was found");
+		if (getActivity() instanceof HomeActivity)
+			this.mIsMultiScreen = ((HomeActivity) getActivity()).isMultiscreen();
 
-        this.getListView().setPadding(15, 0, 15, 0);
+		setListAdapter(mAdapter);
+		setHasOptionsMenu(true);
+		setEmptyText(getString(R.string.msg_pairlist_no_device));
 
-        if (PairListHelper.getScanner().isScannerAvaiable())
-            this.mAdapter.notifyDataSetChanged();
-    }
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setMultiChoiceModeListener(this.mChoiceListener);
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        getActivity().registerReceiver(this.mReceiver, this.mFilter);
-    }
+		getLoaderManager().initLoader(TASK_LOAD, bundle, new QueryLoader.DefaultLoaderCallback(mAdapter));
+	}
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        getActivity().unregisterReceiver(this.mReceiver);
-    }
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id)
+	{
+		super.onListItemClick(l, v, position, id);
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        super.onListItemClick(l, v, position, id);
+		if (this.mIsMultiScreen)
+		{
+			getMessengerFragment().setServerText(mAdapter.getItemAddress(position));
+			return;
+		}
 
-        if (this.mIsMultiscreen)
-        {
-            getMessengerFragment().setServerText((String) this.mAdapter.getItem(position));
-            return;
-        }
+		android.content.Intent intent = new android.content.Intent();
+		intent.putExtra(MessengerFragment.EXTRA_PEER_ADDRESS, mAdapter.getItemAddress(position));
 
-        android.content.Intent intent = new android.content.Intent();
-        intent.putExtra(MessengerFragment.EXTRA_PEER_ADDRESS, (String) this.mAdapter.getItem(position));
+		if (getActivity().getParent() != null)
+			getActivity().getParent().setResult(Activity.RESULT_OK, intent);
+		else
+			getActivity().setResult(Activity.RESULT_OK, intent);
 
-        if (getActivity().getParent() != null)
-            getActivity().getParent().setResult(getActivity().RESULT_OK, intent);
-        else
-            getActivity().setResult(getActivity().RESULT_OK, intent);
+		getActivity().finish();
+	}
 
-        getActivity().finish();
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
+	{
+		super.onCreateOptionsMenu(menu, menuInflater);
+		menuInflater.inflate(R.menu.fragment_pairlist, menu);
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
-    {
-        super.onCreateOptionsMenu(menu, menuInflater);
-        menu.add(1, 1, 1, "Scan for Peer").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem)
+	{
+		int id = menuItem.getItemId();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem)
-    {
-        if ("Scan for Peer".equals(menuItem.getTitle()))
-        {
-            this.mAdapter.requestUpdate();
-            return true;
-        }
+		if (id == R.id.menu_add_server)
+		{
+			new ServerActionDialog(getContext(), mDatabase, mOnClickListener).show();
+		}
+		else if (id == R.id.menu_scan_peers)
+		{
+			updateList();
+			return true;
+		}
 
-        return super.onOptionsItemSelected(menuItem);
-    }
+		return super.onOptionsItemSelected(menuItem);
+	}
 
-    private MessengerFragment getMessengerFragment()
-    {
-        return ((HomeActivity) getActivity()).getMessengerFragment();
-    }
+	private MessengerFragment getMessengerFragment()
+	{
+		return ((HomeActivity) getActivity()).getMessengerFragment();
+	}
+
+	public void refreshList()
+	{
+		getLoaderManager().restartLoader(TASK_LOAD, null, new QueryLoader.DefaultLoaderCallback(mAdapter));
+	}
+
+	private void updateList()
+	{
+		Snackbar.make(getView(),
+				PairListHelper.update(new PairListHelper.ResultHandler()
+				{
+					@Override
+					public void onRunning(InetAddress address)
+					{
+						super.onRunning(address);
+					}
+
+					@Override
+					public void onDeviceFound(InetAddress inetAddress)
+					{
+						super.onDeviceFound(inetAddress);
+						refreshList();
+					}
+				}) ? R.string.msg_scan_start : R.string.msg_scan_running, Snackbar.LENGTH_SHORT).show();
+	}
+
+	private class ChoiceListener implements AbsListView.MultiChoiceModeListener
+	{
+		protected HashSet<String> mCheckedList = new HashSet<>();
+		protected MenuItem mMenuItemEdit;
+
+		@Override
+		public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+		{
+			actionMode.setTitle(R.string.edit_servers);
+
+			new MenuInflater(getContext()).inflate(R.menu.actionmode_edit_server, menu);
+			mMenuItemEdit = menu.findItem(R.id.menu_actionmode_server_edit);
+
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
+		{
+			mCheckedList.clear();
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+		{
+			int id = menuItem.getItemId();
+
+			if (id == R.id.menu_actionmode_server_delete)
+			{
+				for (String template : this.mCheckedList)
+				{
+					mDatabase.getWritableDatabase().delete(MainDatabase.TABLE_SERVERS,
+							MainDatabase.COLUMN_SERVERS_ADDRESS + "=?", new String[] {template});
+				}
+			}
+			if (id == R.id.menu_actionmode_server_edit)
+			{
+				new ServerActionDialog(getActivity(), mAdapter.getDatabase(), mOnClickListener, (String) mCheckedList.toArray()[0]).show();
+			}
+
+			actionMode.finish();
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode actionMode)
+		{
+			refreshList();
+
+			mCheckedList.clear();
+			mMenuItemEdit = null;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
+		{
+			String str = mAdapter.getItemAddress(position);
+
+			if (isSelected)
+				mCheckedList.add(str);
+			else
+				mCheckedList.remove(str);
+
+			mMenuItemEdit.setVisible(mCheckedList.size() == 1);
+			actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+		}
+	}
 }

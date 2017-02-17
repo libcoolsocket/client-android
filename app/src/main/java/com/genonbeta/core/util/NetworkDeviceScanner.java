@@ -1,5 +1,7 @@
 package com.genonbeta.core.util;
 
+import android.support.annotation.NonNull;
+
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -33,7 +35,7 @@ public class NetworkDeviceScanner
         return true;
     }
 
-    public boolean isScannerAvaiable()
+    public boolean isScannerAvailable()
     {
         return (mInterfaces.size() == 0 && !mIsLockRequested);
     }
@@ -43,7 +45,7 @@ public class NetworkDeviceScanner
         if (this.mIsLockRequested)
             return;
 
-        if (this.isScannerAvaiable())
+        if (this.isScannerAvailable())
         {
             // this sequence only works when threads complete the job
 
@@ -69,7 +71,7 @@ public class NetworkDeviceScanner
 
     public boolean scan(ArrayList<String> interfaces, ScannerHandler handler)
     {
-        if (!this.isScannerAvaiable())
+        if (!this.isScannerAvailable())
             return false;
 
         this.mInterfaces.addAll(interfaces);
@@ -87,6 +89,8 @@ public class NetworkDeviceScanner
 
     public static interface ScannerHandler
     {
+        public void onRunning(InetAddress address);
+
         public void onDeviceFound(InetAddress address);
 
         public void onThreadsCompleted();
@@ -105,9 +109,8 @@ public class NetworkDeviceScanner
         public void updateScanner()
         {
             String ipAddress = NetworkDeviceScanner.this.mInterfaces.get(0);
-            String addressPrefix = ipAddress.substring(0, ipAddress.lastIndexOf(".") + 1);
 
-            this.mAddressPrefix = addressPrefix;
+            this.mAddressPrefix = ipAddress.substring(0, ipAddress.lastIndexOf(".") + 1);
             this.mDevices = new boolean[256];
             this.mThreadsExited = NetworkDeviceScanner.this.mNumberOfThreads;
         }
@@ -119,7 +122,7 @@ public class NetworkDeviceScanner
             {
                 synchronized (mDevices)
                 {
-                    if (mDevices[mPosition] == true || mPosition == 0 || NetworkDeviceScanner.this.mIsBreakRequested == true)
+                    if (mDevices[mPosition] || mPosition == 0 || NetworkDeviceScanner.this.mIsBreakRequested)
                         continue;
 
                     mDevices[mPosition] = true;
@@ -128,6 +131,9 @@ public class NetworkDeviceScanner
                 try
                 {
                     InetAddress inet = InetAddress.getByName(mAddressPrefix + mPosition);
+
+					if (NetworkDeviceScanner.this.mHandler != null)
+						NetworkDeviceScanner.this.mHandler.onRunning(inet);
 
                     if (inet.isReachable(300) && NetworkDeviceScanner.this.mHandler != null)
                         NetworkDeviceScanner.this.mHandler.onDeviceFound(inet);
@@ -150,7 +156,7 @@ public class NetworkDeviceScanner
     protected class ScannerExecutor implements Executor
     {
         @Override
-        public void execute(Runnable scanner)
+        public void execute(@NonNull Runnable scanner)
         {
             new Thread(scanner).start();
         }

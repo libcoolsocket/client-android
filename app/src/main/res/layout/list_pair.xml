@@ -44,6 +44,7 @@
         android:singleLine="true"
         android:textSize="15sp"
         android:textStyle="italic"
+        android:paddingRight="2dp"
         />
 
 </RelativeLayout>

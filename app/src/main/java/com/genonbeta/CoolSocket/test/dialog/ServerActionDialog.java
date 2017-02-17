@@ -1,0 +1,80 @@
+package com.genonbeta.CoolSocket.test.dialog;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.genonbeta.CoolSocket.test.R;
+import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.android.database.SQLQuery;
+import com.genonbeta.android.database.SQLiteDatabase;
+
+/**
+ * Created by: veli
+ * Date: 2/4/17 9:56 PM
+ */
+
+public class ServerActionDialog extends AlertDialog.Builder
+{
+	private EditText mEditText;
+	private String mEditedServer;
+
+	public ServerActionDialog(Context context, final SQLiteDatabase db, final DialogInterface.OnClickListener onClickListener)
+	{
+		super(context);
+
+		final View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_server_action, null);
+		mEditText = (EditText) view.findViewById(R.id.layout_server_action_edit_text);
+
+		DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i)
+			{
+				Editable text = mEditText.getText();
+
+				if (text.length() > 0)
+				{
+					if (db.getFirstFromTable(new SQLQuery.Select(MainDatabase.TABLE_SERVERS)
+							.setWhere(MainDatabase.COLUMN_SERVERS_ADDRESS+ "=?", text.toString())) == null)
+					{
+						ContentValues values = new ContentValues();
+						values.put(MainDatabase.COLUMN_SERVERS_ID, "Server #" +String.valueOf(System.currentTimeMillis() / 1000));
+						values.put(MainDatabase.COLUMN_SERVERS_ADDRESS, text.toString());
+
+						if (mEditedServer == null)
+							db.getWritableDatabase().insert(MainDatabase.TABLE_SERVERS, null, values);
+						else
+							db.getWritableDatabase().update(MainDatabase.TABLE_SERVERS, values, MainDatabase.COLUMN_SERVERS_ADDRESS + "=?", new String[]{mEditedServer});
+					}
+					else
+						Toast.makeText(getContext(), R.string.error_server_exist, Toast.LENGTH_SHORT).show();
+				}
+				else
+					Toast.makeText(getContext(), R.string.error_server_empty, Toast.LENGTH_SHORT).show();
+
+				onClickListener.onClick(dialogInterface, i);
+			}
+		};
+
+		setTitle(R.string.add_server);
+		setNegativeButton(R.string.cancel, null);
+		setPositiveButton(R.string.save, positiveListener);
+		setView(view);
+	}
+
+	public ServerActionDialog(Context context, SQLiteDatabase db, DialogInterface.OnClickListener onClickListener, String editedServer)
+	{
+		this(context, db, onClickListener);
+		setTitle(R.string.edit_server);
+
+		mEditedServer = editedServer;
+		mEditText.getText().append(editedServer);
+	}
+}

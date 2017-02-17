@@ -2,7 +2,6 @@ package com.genonbeta.CoolSocket.test.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -11,166 +10,180 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.genonbeta.CoolSocket.test.HomeActivity;
+import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.adapter.TemplateListAdapter;
-import com.genonbeta.CoolSocket.test.dialog.EditTemplateDialog;
-import com.genonbeta.CoolSocket.test.dialog.NewTemplateDialog;
-import com.genonbeta.CoolSocket.test.helper.TemplateItem;
+import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.dialog.TemplateActionDialog;
+import com.genonbeta.android.database.util.QueryLoader;
 
 import java.util.HashSet;
 
 public class TemplateListFragment extends ListFragment
 {
-    private TemplateListAdapter mAdapter;
-    private ChoiceListener mChoiceListener = new ChoiceListener();
-    private boolean mIsMultiscreen = false;
-    private OnClickListener mPositive = new OnClickListener()
-    {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i)
-        {
-            TemplateListFragment.this.mAdapter.update();
-        }
-    };
+	private static final int TASK_LOAD = 1;
 
-    @Override
-    public void onActivityCreated(Bundle bundle)
-    {
-        super.onActivityCreated(bundle);
+	private boolean mIsMultiScreen = false;
+	private TemplateListAdapter mAdapter;
+	private MainDatabase mDatabase;
+	private ChoiceListener mChoiceListener = new ChoiceListener();
+	private DialogInterface.OnClickListener mPositive = new DialogInterface.OnClickListener()
+	{
+		@Override
+		public void onClick(DialogInterface dialogInterface, int i)
+		{
+			refreshList();
+		}
+	};
 
-        this.mAdapter = new TemplateListAdapter(getActivity());
+	@Override
+	public void onActivityCreated(Bundle bundle)
+	{
+		super.onActivityCreated(bundle);
 
-        if (getActivity() instanceof HomeActivity)
-            this.mIsMultiscreen = ((HomeActivity) getActivity()).isMultiscreen();
+		mDatabase = new MainDatabase(getContext());
+		mAdapter = new TemplateListAdapter(getActivity(), mDatabase);
 
-        setListAdapter(this.mAdapter);
-        setHasOptionsMenu(true);
-        setEmptyText("No template");
+		if (getActivity() instanceof HomeActivity)
+			this.mIsMultiScreen = ((HomeActivity) getActivity()).isMultiscreen();
 
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        getListView().setMultiChoiceModeListener(this.mChoiceListener);
-    }
+		setListAdapter(this.mAdapter);
+		setHasOptionsMenu(true);
+		setEmptyText(getString(R.string.msg_templatelist_no_template));
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        super.onListItemClick(l, v, position, id);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setMultiChoiceModeListener(this.mChoiceListener);
 
-        if (this.mIsMultiscreen)
-        {
-            getMessengerFragment().setMessageBox(((TemplateItem) this.mAdapter.getItem(position)).templateOriginal, true);
-            return;
-        }
+		getLoaderManager().initLoader(TASK_LOAD, bundle, new QueryLoader.DefaultLoaderCallback(mAdapter));
+	}
 
-        Intent intent = new Intent();
-        intent.putExtra(MessengerFragment.EXTRA_MESSAGE, ((TemplateItem) this.mAdapter.getItem(position)).templateOriginal);
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id)
+	{
+		super.onListItemClick(l, v, position, id);
 
-        if (getActivity().getParent() != null)
-            getActivity().getParent().setResult(Activity.RESULT_OK, intent);
-        else
-            getActivity().setResult(Activity.RESULT_OK, intent);
+		if (this.mIsMultiScreen)
+		{
+			getMessengerFragment().setMessageBox(getTemplate(position), true);
+			return;
+		}
 
-        getActivity().finish();
-    }
+		Intent intent = new Intent();
+		intent.putExtra(MessengerFragment.EXTRA_MESSAGE, getTemplate(position));
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        this.mAdapter.update();
-    }
+		if (getActivity().getParent() != null)
+			getActivity().getParent().setResult(Activity.RESULT_OK, intent);
+		else
+			getActivity().setResult(Activity.RESULT_OK, intent);
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
-    {
-        super.onCreateOptionsMenu(menu, menuInflater);
-        menu.add(0, 0, 0, "Add").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
+		getActivity().finish();
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem)
-    {
-        if ("Add".equals(menuItem.getTitle()))
-        {
-            NewTemplateDialog newTemplateDialog = new NewTemplateDialog(getActivity(), TemplateListFragment.this.mAdapter.getDatabase(), TemplateListFragment.this.mPositive, (OnClickListener) null);
-            newTemplateDialog.show();
-            return true;
-        }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
+	{
+		super.onCreateOptionsMenu(menu, menuInflater);
+		menuInflater.inflate(R.menu.fragment_templatelist, menu);
+	}
 
-        return super.onOptionsItemSelected(menuItem);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem)
+	{
+		int id = menuItem.getItemId();
 
-    private MessengerFragment getMessengerFragment()
-    {
-        return ((HomeActivity) getActivity()).getMessengerFragment();
-    }
+		if (id == R.id.menu_template_add)
+		{
+			new TemplateActionDialog(getActivity(), mAdapter.getDatabase(), mPositive).show();
+			return true;
+		}
 
-    private class ChoiceListener implements MultiChoiceModeListener
-    {
-        protected HashSet<String> mCheckedList = new HashSet<String>();
-        protected MenuItem mEdit;
+		return super.onOptionsItemSelected(menuItem);
+	}
 
-        @Override
-        public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
-        {
-            actionMode.setTitle("Edit templates");
+	private String getTemplate(int position)
+	{
+		return mAdapter.getList().get(position).getString(MainDatabase.COLUMN_TEMPLATE_MESSAGE);
+	}
 
-            menu.add("Delete");
-            this.mEdit = menu.add("Edit");
+	private MessengerFragment getMessengerFragment()
+	{
+		return ((HomeActivity) getActivity()).getMessengerFragment();
+	}
 
-            return true;
-        }
+	public void refreshList()
+	{
+		getLoaderManager().restartLoader(TASK_LOAD, null, new QueryLoader.DefaultLoaderCallback(mAdapter));
+	}
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
-        {
-            this.mCheckedList.clear();
-            return true;
-        }
+	private class ChoiceListener implements AbsListView.MultiChoiceModeListener
+	{
+		protected HashSet<String> mCheckedList = new HashSet<>();
+		protected MenuItem mMenuItemEdit;
 
-        @Override
-        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
-        {
-            if ("Delete".equals(menuItem.getTitle()))
-            {
-                for (String delete : this.mCheckedList)
-                {
-                    TemplateListFragment.this.mAdapter.getDatabase().delete(delete);
-                }
-            }
-            else if ("Edit".equals(menuItem.getTitle()) || this.mCheckedList.size() != 1)
-            {
-                EditTemplateDialog editTemplateDialog = new EditTemplateDialog(TemplateListFragment.this.getActivity(), TemplateListFragment.this.mAdapter.getDatabase(), TemplateListFragment.this.mPositive, null, (String) this.mCheckedList.toArray()[0]);
-                editTemplateDialog.show();
-            }
+		@Override
+		public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+		{
+			actionMode.setTitle(R.string.edit_templates);
 
-            actionMode.finish();
-            return true;
-        }
+			new MenuInflater(getContext()).inflate(R.menu.actionmode_edit_templates, menu);
+			mMenuItemEdit = menu.findItem(R.id.menu_actionmode_template_edit);
 
-        @Override
-        public void onDestroyActionMode(ActionMode actionMode)
-        {
-            TemplateListFragment.this.mAdapter.update();
-            this.mCheckedList.clear();
-            this.mEdit = null;
-        }
+			return true;
+		}
 
-        @Override
-        public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
-        {
-            String str = ((TemplateItem) TemplateListFragment.this.mAdapter.getItem(position)).templateOriginal;
+		@Override
+		public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
+		{
+			mCheckedList.clear();
+			return true;
+		}
 
-            if (isSelected)
-                this.mCheckedList.add(str);
-            else
-                this.mCheckedList.remove(str);
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+		{
+			int id = menuItem.getItemId();
 
-            this.mEdit.setVisible(this.mCheckedList.size() == 1);
-            actionMode.setSubtitle(TemplateListFragment.this.getListView().getCheckedItemCount() + " selected");
-        }
-    }
+			if (id == R.id.menu_actionmode_template_delete)
+			{
+				for (String template : this.mCheckedList)
+				{
+					mDatabase.getWritableDatabase().delete(MainDatabase.TABLE_TEMPLATE,
+							MainDatabase.COLUMN_TEMPLATE_MESSAGE + "=?", new String[] {template});
+				}
+			}
+			if (id == R.id.menu_actionmode_template_edit)
+			{
+				new TemplateActionDialog(getActivity(), mAdapter.getDatabase(), mPositive, (String) mCheckedList.toArray()[0]).show();
+			}
+
+			actionMode.finish();
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode actionMode)
+		{
+			refreshList();
+
+			mCheckedList.clear();
+			mMenuItemEdit = null;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
+		{
+			String str = getTemplate(position);
+
+			if (isSelected)
+				mCheckedList.add(str);
+			else
+				mCheckedList.remove(str);
+
+			mMenuItemEdit.setVisible(mCheckedList.size() == 1);
+			actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+		}
+	}
 }
