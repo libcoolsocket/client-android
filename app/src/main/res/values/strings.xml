@@ -31,7 +31,7 @@
     <string name="title_about">About CoolSocket</string>
     <string name="msg_about_sentence_one">This application is developed to test Genonbeta CoolSocket API</string>
     <string name="msg_about_sentence_two">CoolSocket API provides fast communication mechanism</string>
-    <string name="msg_about_sentence_three">This CoolSocket application is developed by love and with a couple of developer</string>
+    <string name="msg_about_sentence_three">This CoolSocket application is developed by love and with a couple of developers</string>
     <string name="msg_pairlist_no_device">No pair was found</string>
     <string name="scan_peers">Scan peers</string>
     <string name="msg_templatelist_no_template">No template</string>
