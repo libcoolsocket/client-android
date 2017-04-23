@@ -13,22 +13,19 @@ import org.json.JSONObject;
 public class JsonEditorDialog extends Builder
 {
 	private JsonObjectAdapter mAdapter;
-	private JSONObject mJson;
 
-	public JsonEditorDialog(Context context, JSONObject jsonObject, final OnEditorClickListener removeListener, final OnEditorClickListener listItemSelected, final ThirdOption thirdOption)
+	public JsonEditorDialog(final Context context, final JSONObject jsonObject, final OnEditorClickListener removeListener, final OnEditorClickListener listItemSelected, final ThirdOption thirdOption)
 	{
 		super(context);
 
 		setTitle(R.string.title_json_editor);
 
-		this.mJson = jsonObject;
-
 		if (jsonObject.length() < 1)
 			setMessage(R.string.msg_json_editor_list_empty);
 		else
 		{
-			this.mAdapter = new JsonObjectAdapter(context, jsonObject);
-			setAdapter(this.mAdapter, new OnClickListener()
+			mAdapter = new JsonObjectAdapter(context, jsonObject);
+			setAdapter(mAdapter, new OnClickListener()
 					{
 						@Override
 						public void onClick(DialogInterface p1, int p2)
@@ -37,31 +34,64 @@ public class JsonEditorDialog extends Builder
 						}
 					}
 			);
+
+			setPositiveButton(R.string.json_editor_button_edit, new OnClickListener()
+			{
+				@Override
+				public void onClick(DialogInterface dialog, int which)
+				{
+					new JsonEditorDialog(context, jsonObject, removeListener).show();
+				}
+			});
 		}
 
 		if (thirdOption != null)
 			setNeutralButton(thirdOption.getButtonName(), thirdOption);
 
 		setNegativeButton(R.string.close, null);
-		setPositiveButton(R.string.json_editor_button_remove_all, new OnClickListener()
+	}
+
+	public JsonEditorDialog(final Context context, final JSONObject jsonObject, final OnEditorClickListener removeListener)
+	{
+		super(context);
+
+		setTitle(R.string.title_json_editor_edit);
+
+		mAdapter = new JsonObjectAdapter(context, jsonObject);
+
+		setAdapter(mAdapter, new OnClickListener()
 				{
 					@Override
 					public void onClick(DialogInterface p1, int p2)
 					{
-						if (mAdapter != null)
-							for (String remove : mAdapter.getKeys())
-								mJson.remove(remove);
+						jsonObject.remove(((String) mAdapter.getItem(p2)));
 
 						if (removeListener != null)
 							removeListener.onJsonClick(JsonEditorDialog.this, p1, p2);
 					}
 				}
 		);
+
+		setPositiveButton(R.string.json_editor_button_remove_all, new OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface p1, int p2)
+					{
+						for (String remove : mAdapter.getKeys())
+							jsonObject.remove(remove);
+
+						if (removeListener != null)
+							removeListener.onJsonClick(JsonEditorDialog.this, p1, p2);
+					}
+				}
+		);
+
+		setNegativeButton(R.string.close, null);
 	}
 
 	public JsonObjectAdapter getJsonAdapter()
 	{
-		return this.mAdapter;
+		return mAdapter;
 	}
 
 	public static interface OnEditorClickListener

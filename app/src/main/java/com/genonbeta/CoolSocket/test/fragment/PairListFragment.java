@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.R;
@@ -19,6 +20,7 @@ import com.genonbeta.CoolSocket.test.adapter.PairListAdapter;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
 import com.genonbeta.CoolSocket.test.dialog.ServerActionDialog;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
+import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.util.QueryLoader;
 
 import java.net.InetAddress;
@@ -67,14 +69,16 @@ public class PairListFragment extends ListFragment
 	{
 		super.onListItemClick(l, v, position, id);
 
+		String title = ((CursorItem) mAdapter.getItem(position)).getString(MainDatabase.COLUMN_SERVERS_TITLE);
+
 		if (this.mIsMultiScreen)
 		{
-			getMessengerFragment().setServerText(mAdapter.getItemAddress(position));
+			getMessengerFragment().setServerText(title);
 			return;
 		}
 
 		android.content.Intent intent = new android.content.Intent();
-		intent.putExtra(MessengerFragment.EXTRA_PEER_ADDRESS, mAdapter.getItemAddress(position));
+		intent.putExtra(MessengerFragment.EXTRA_PEER_ADDRESS, title);
 
 		if (getActivity().getParent() != null)
 			getActivity().getParent().setResult(Activity.RESULT_OK, intent);
@@ -141,7 +145,7 @@ public class PairListFragment extends ListFragment
 
 	private class ChoiceListener implements AbsListView.MultiChoiceModeListener
 	{
-		protected HashSet<String> mCheckedList = new HashSet<>();
+		protected HashSet<Integer> mCheckedList = new HashSet<>();
 		protected MenuItem mMenuItemEdit;
 
 		@Override
@@ -169,15 +173,21 @@ public class PairListFragment extends ListFragment
 
 			if (id == R.id.menu_actionmode_server_delete)
 			{
-				for (String template : this.mCheckedList)
-				{
+				for (int uniqueId : this.mCheckedList)
 					mDatabase.getWritableDatabase().delete(MainDatabase.TABLE_SERVERS,
-							MainDatabase.COLUMN_SERVERS_ADDRESS + "=?", new String[] {template});
-				}
+							MainDatabase.COLUMN_SERVERS_ID + "=?", new String[]{String.valueOf(uniqueId)});
 			}
-			if (id == R.id.menu_actionmode_server_edit)
+			else if (id == R.id.menu_actionmode_server_edit)
 			{
-				new ServerActionDialog(getActivity(), mAdapter.getDatabase(), mOnClickListener, (String) mCheckedList.toArray()[0]).show();
+				int editId = (int) mCheckedList.toArray()[0];
+
+				if (editId == 0)
+				{
+					Toast.makeText(getContext(), R.string.server_not_actual, Toast.LENGTH_SHORT).show();
+					return false;
+				}
+				else
+					new ServerActionDialog(getActivity(), mAdapter.getDatabase(), mOnClickListener, editId).show();
 			}
 
 			actionMode.finish();
@@ -196,15 +206,26 @@ public class PairListFragment extends ListFragment
 		@Override
 		public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean isSelected)
 		{
-			String str = mAdapter.getItemAddress(position);
+			int str = mAdapter.getItemUniqueId(position);
 
-			if (isSelected)
-				mCheckedList.add(str);
+			if (str == 0)
+			{
+				if (isSelected)
+				{
+					getListView().setItemChecked(position, false);
+					Toast.makeText(getContext(), R.string.server_not_actual, Toast.LENGTH_SHORT).show();
+				}
+			}
 			else
-				mCheckedList.remove(str);
+			{
+				if (isSelected)
+					mCheckedList.add(str);
+				else
+					mCheckedList.remove(str);
 
-			mMenuItemEdit.setVisible(mCheckedList.size() == 1);
-			actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+				mMenuItemEdit.setVisible(mCheckedList.size() == 1);
+				actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+			}
 		}
 	}
 }

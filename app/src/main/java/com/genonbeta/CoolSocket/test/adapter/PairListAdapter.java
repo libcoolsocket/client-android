@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.dialog.ServerActionDialog;
 import com.genonbeta.CoolSocket.test.helper.GAnimater;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper;
 import com.genonbeta.CoolSocket.test.helper.PairListHelper.DeviceInfo;
@@ -38,6 +39,12 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 	{
 		super(context, db, new SQLQuery.Select(MainDatabase.TABLE_SERVERS));
 	}
+
+	public int getItemUniqueId(int position)
+	{
+		return ((CursorItem) getItem(position)).getInt(MainDatabase.COLUMN_SERVERS_ID);
+	}
+
 	public String getItemAddress(int position)
 	{
 		return ((CursorItem) getItem(position)).getString(MainDatabase.COLUMN_SERVERS_ADDRESS);
@@ -54,8 +61,9 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 			DeviceInfo info = servers.get(deviceIp);
 
 			if (info.deviceName != null)
-				item.put(MainDatabase.COLUMN_SERVERS_ID, info.deviceName);
+				item.put(MainDatabase.COLUMN_SERVERS_TITLE, info.deviceName);
 
+			item.put(MainDatabase.COLUMN_SERVERS_ID, 0);
 			item.put(MainDatabase.COLUMN_SERVERS_ADDRESS, deviceIp);
 
 			if (info.trebleShot || info.coolSocket || info.deviceController)
@@ -98,11 +106,11 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 		if (item.exists(COLUMN_EXTRA_AVAILABLESERVICES))
 			textView2.setText(item.getString(COLUMN_EXTRA_AVAILABLESERVICES));
 
-		if (item.exists(MainDatabase.COLUMN_SERVERS_ID))
-			textView3.setText(item.getString(MainDatabase.COLUMN_SERVERS_ID));
+		if (item.exists(MainDatabase.COLUMN_SERVERS_TITLE))
+			textView3.setText(item.getString(MainDatabase.COLUMN_SERVERS_TITLE));
 
 		textView2.setVisibility(item.exists(COLUMN_EXTRA_AVAILABLESERVICES) ? View.VISIBLE : View.GONE);
-		textView3.setVisibility(item.exists(MainDatabase.COLUMN_SERVERS_ID) ? View.VISIBLE : View.GONE);
+		textView3.setVisibility(item.exists(MainDatabase.COLUMN_SERVERS_TITLE) ? View.VISIBLE : View.GONE);
 
 		return view;
 	}

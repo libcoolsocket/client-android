@@ -14,7 +14,7 @@
     <color name="pressedColor">@color/itemBackground</color>
     <color name="fabColorNewMessage">#036d73</color>
     <color name="fabColorNormal">@color/colorPrimary</color>
-    <color name="receivedMessage">#00B000</color>
+    <color name="receivedMessage">#FFFFFF</color>
     <color name="errorMessage">#b00c00</color>
-    <color name="sentMessage">#FFFFFF</color>
+    <color name="sentMessage">#00B000</color>
 </resources>

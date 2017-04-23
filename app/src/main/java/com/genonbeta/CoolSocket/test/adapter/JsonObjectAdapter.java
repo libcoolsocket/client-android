@@ -24,10 +24,10 @@ public class JsonObjectAdapter extends BaseAdapter
 
 	public JsonObjectAdapter(Context context, JSONObject jsonObject)
 	{
-		this.mKeys = new ArrayList<String>();
-		this.mValues = new ArrayList<String>();
-		this.mObject = jsonObject;
-		this.mContext = context;
+		mKeys = new ArrayList<String>();
+		mValues = new ArrayList<String>();
+		mObject = jsonObject;
+		mContext = context;
 
 		if (jsonObject.length() > 0)
 		{
@@ -39,8 +39,8 @@ public class JsonObjectAdapter extends BaseAdapter
 				{
 					String str = (String) keys.next();
 
-					this.mKeys.add(str);
-					this.mValues.add(this.mObject.getString(str));
+					mKeys.add(str);
+					mValues.add(mObject.getString(str));
 				} catch (JSONException e)
 				{
 					e.printStackTrace();
@@ -52,24 +52,24 @@ public class JsonObjectAdapter extends BaseAdapter
 
 	public ArrayList<String> getKeys()
 	{
-		return this.mKeys;
+		return mKeys;
 	}
 
 	public ArrayList<String> getValues()
 	{
-		return this.mValues;
+		return mValues;
 	}
 
 	@Override
 	public int getCount()
 	{
-		return this.mObject.length();
+		return mObject.length();
 	}
 
 	@Override
 	public Object getItem(int i)
 	{
-		return null;
+		return mKeys.get(i);
 	}
 
 	@Override
@@ -81,14 +81,15 @@ public class JsonObjectAdapter extends BaseAdapter
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup)
 	{
-		View inflate = LayoutInflater.from(this.mContext).inflate(R.layout.list_json, viewGroup, false);
+		if (view == null)
+			view = LayoutInflater.from(this.mContext).inflate(R.layout.list_json, viewGroup, false);
 
-		TextView textView = (TextView) inflate.findViewById(R.id.list_text);
-		TextView textView2 = (TextView) inflate.findViewById(R.id.list_text2);
+		TextView textView = (TextView) view.findViewById(R.id.list_text);
+		TextView textView2 = (TextView) view.findViewById(R.id.list_text2);
 
-		textView.setText(this.mKeys.get(i));
-		textView2.setText(this.mValues.get(i));
+		textView.setText(mKeys.get(i));
+		textView2.setText(mValues.get(i));
 
-		return inflate;
+		return view;
 	}
 }

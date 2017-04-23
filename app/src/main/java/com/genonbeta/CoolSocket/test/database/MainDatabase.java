@@ -25,6 +25,7 @@ public class MainDatabase extends SQLiteDatabase
 
 	public static final String TABLE_SERVERS = "servers";
 	public static final String COLUMN_SERVERS_ID = "id";
+	public static final String COLUMN_SERVERS_TITLE = "title";
 	public static final String COLUMN_SERVERS_ADDRESS = "address";
 
 	public MainDatabase(Context context)
@@ -48,6 +49,7 @@ public class MainDatabase extends SQLiteDatabase
 
 		new SQLQuery.CreateTable(TABLE_SERVERS)
 				.addColumn(COLUMN_SERVERS_ID, SQLQuery.Type.INTEGER.toString(), false)
+				.addColumn(COLUMN_SERVERS_TITLE, SQLQuery.Type.TEXT.toString(), false)
 				.addColumn(COLUMN_SERVERS_ADDRESS, SQLQuery.Type.TEXT.toString(), false)
 				.exec(sqLiteDatabase);
 	}

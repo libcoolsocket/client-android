@@ -12,11 +12,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog.Builder;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -61,12 +59,13 @@ import org.json.JSONObject;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MessengerFragment extends Fragment
 {
 	public static final String TAG = "MessengerFragment";
+
+	public static final String COLUMN_ADDEDCLOSURE = "addedClosure";
 
 	public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	public static final String EXTRA_MESSAGE = "extraMessage";
@@ -92,6 +91,7 @@ public class MessengerFragment extends Fragment
 	private JSONObject mPendingJson;
 	private boolean mIsMultiScreen = false;
 	private boolean mJsonEnabled = false;
+	private CursorItem mGeneratedAddress = null;
 	private MessageSenderHandler mSenderHandler = new MessageSenderHandler();
 	private SMSReceiver mSMSReceiver = new SMSReceiver();
 	private RemoteSynchronous mSynchronous = new RemoteSynchronous();
@@ -102,11 +102,11 @@ public class MessengerFragment extends Fragment
 		super.onCreate(bundle);
 		setHasOptionsMenu(true);
 
-		if (Thread.State.TERMINATED.equals(this.mSynchronous.getState()))
-			this.mSynchronous = new RemoteSynchronous();
+		if (Thread.State.TERMINATED.equals(mSynchronous.getState()))
+			mSynchronous = new RemoteSynchronous();
 
-		if (!this.mSynchronous.isAlive())
-			this.mSynchronous.start();
+		if (!mSynchronous.isAlive())
+			mSynchronous.start();
 	}
 
 	@Override
@@ -181,16 +181,29 @@ public class MessengerFragment extends Fragment
 			}
 		});
 
+		View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener()
+		{
+			@Override
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if (!hasFocus)
+					mGeneratedAddress = null;
+			}
+		};
+
+		mEditTextServer.setOnFocusChangeListener(focusListener);
+		mEditTextPort.setOnFocusChangeListener(focusListener);
+
 		mDatabase.getTable(new SQLQuery.Select(MainDatabase.TABLE_MESSAGE));
-		mListView.setAdapter(this.mAdapter);
-		setServerText(this.mPreferences.getString("lastServer", "0.0.0.0"));
-		setMessageBox(this.mPreferences.getString("lastMessage", ""), false);
-		setPortText(this.mPreferences.getInt("lastPort", 3000));
-		setMode(this.mPreferences.getBoolean("lastSelectedMode", false));
+		mListView.setAdapter(mAdapter);
+		setServerText(mPreferences.getString("lastServer", "0.0.0.0"));
+		setMessageBox(mPreferences.getString("lastMessage", ""), false);
+		setPortText(mPreferences.getInt("lastPort", 3000));
+		setMode(mPreferences.getBoolean("lastSelectedMode", false));
 
 		try
 		{
-			mPendingJson = new JSONObject(this.mPreferences.getString("lastJsonIndex", "{}"));
+			mPendingJson = new JSONObject(mPreferences.getString("lastJsonIndex", "{}"));
 		} catch (JSONException e)
 		{
 			mPendingJson = new JSONObject();
@@ -208,7 +221,7 @@ public class MessengerFragment extends Fragment
 
 		menuInflater.inflate(R.menu.fragment_messenger, menu);
 
-		if (this.mIsMultiScreen)
+		if (mIsMultiScreen)
 		{
 			menu.findItem(R.id.menu_pair_finder).setVisible(false);
 			menu.findItem(R.id.menu_template_list).setVisible(false);
@@ -289,9 +302,7 @@ public class MessengerFragment extends Fragment
 				}
 			};
 
-			JsonEditorDialog jsonEditorDialog = new JsonEditorDialog(this.getActivity(), this.mPendingJson, removeListener, listItemSelected, thirdOption);
-
-			jsonEditorDialog.show();
+			new JsonEditorDialog(getActivity(), mPendingJson, removeListener, listItemSelected, thirdOption).show();
 		}
 
 		return super.onOptionsItemSelected(menuItem);
@@ -303,15 +314,15 @@ public class MessengerFragment extends Fragment
 		super.onPause();
 		getActivity().unregisterReceiver(mSMSReceiver);
 
-		Editor edit = this.mPreferences.edit();
+		Editor edit = mPreferences.edit();
 
 		try
 		{
-			edit.putString("lastServer", this.mEditTextServer.getText().toString());
-			edit.putString("lastMessage", this.mEditText.getText().toString());
-			edit.putString("lastJsonIndex", this.mPendingJson.toString());
-			edit.putBoolean("lastSelectedMode", this.mJsonEnabled);
-			edit.putInt("lastPort", Integer.parseInt(this.mEditTextPort.getText().toString()));
+			edit.putString("lastServer", mEditTextServer.getText().toString());
+			edit.putString("lastMessage", mEditText.getText().toString());
+			edit.putString("lastJsonIndex", mPendingJson.toString());
+			edit.putBoolean("lastSelectedMode", mJsonEnabled);
+			edit.putInt("lastPort", Integer.parseInt(mEditTextPort.getText().toString()));
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -340,7 +351,10 @@ public class MessengerFragment extends Fragment
 				{
 					case REQUEST_CHOOSE_PEER /*15*/:
 						if (intent.hasExtra(EXTRA_PEER_ADDRESS))
+						{
 							setServerText(intent.getStringExtra(EXTRA_PEER_ADDRESS));
+							changeUtilities(false);
+						}
 						break;
 					case REQUEST_USE_TEMPLATE /*30*/:
 						if (intent.hasExtra(EXTRA_MESSAGE))
@@ -404,24 +418,57 @@ public class MessengerFragment extends Fragment
 
 		if (mode)
 		{
-			this.mConnectionFormLayout.setAnimation(fadeOut);
-			this.mConnectionFormLayout.setVisibility(View.GONE);
+			mConnectionFormLayout.setAnimation(fadeOut);
+			mConnectionFormLayout.setVisibility(View.GONE);
 
-			this.mEditText.setVisibility(View.VISIBLE);
-			this.mEditText.setAnimation(fadeIn);
+			mEditText.setVisibility(View.VISIBLE);
+			mEditText.setAnimation(fadeIn);
 
-			this.mEditText.requestFocus();
+			mEditText.requestFocus();
 
 			return;
 		}
 
-		this.mConnectionFormLayout.setAnimation(fadeIn);
-		this.mConnectionFormLayout.setVisibility(View.VISIBLE);
+		mConnectionFormLayout.setAnimation(fadeIn);
+		mConnectionFormLayout.setVisibility(View.VISIBLE);
 
-		this.mEditText.setAnimation(fadeOut);
-		this.mEditText.setVisibility(View.GONE);
+		mEditText.setAnimation(fadeOut);
+		mEditText.setVisibility(View.GONE);
 
-		this.mEditTextServer.requestFocus();
+		mEditTextServer.requestFocus();
+	}
+
+	public CursorItem getServer()
+	{
+		String serverAddress = mEditTextServer.getText().toString();
+
+		if (mGeneratedAddress != null)
+			return mGeneratedAddress;
+
+		String addedClosure = null;
+		int pointForSeparator = serverAddress.lastIndexOf(":");
+
+		if (pointForSeparator != -1)
+		{
+			addedClosure = serverAddress.substring(pointForSeparator + 1);
+			serverAddress = serverAddress.substring(0, pointForSeparator);
+		}
+
+		CursorItem possibleServer = mDatabase.getFirstFromTable(new SQLQuery.Select(MainDatabase.TABLE_SERVERS)
+				.setWhere(MainDatabase.COLUMN_SERVERS_TITLE + "=?", serverAddress));
+
+		mGeneratedAddress = possibleServer != null ? possibleServer : new CursorItem()
+				.put(MainDatabase.COLUMN_SERVERS_ID, 0)
+				.put(MainDatabase.COLUMN_SERVERS_TITLE, serverAddress)
+				.put(MainDatabase.COLUMN_SERVERS_ADDRESS, serverAddress);
+
+		if (addedClosure != null)
+		{
+			mGeneratedAddress.put(COLUMN_ADDEDCLOSURE, addedClosure)
+					.put(MainDatabase.COLUMN_SERVERS_ADDRESS, String.format(mGeneratedAddress.getString(MainDatabase.COLUMN_SERVERS_ADDRESS), addedClosure));
+		}
+
+		return getServer();
 	}
 
 	public boolean jsonPusher(String text)
@@ -441,18 +488,18 @@ public class MessengerFragment extends Fragment
 		{
 			if (key.equals(":null"))
 			{
-				this.mPendingJson.put(value, "");
+				mPendingJson.put(value, "");
 			}
-			else if (key.equals(":rm") && this.mPendingJson.has(value))
+			else if (key.equals(":rm") && mPendingJson.has(value))
 			{
-				this.mPendingJson.remove(value);
+				mPendingJson.remove(value);
 			}
 			else
 			{
-				this.mPendingJson.put(key, value);
+				mPendingJson.put(key, value);
 			}
 
-			Toast.makeText(this.getActivity(), getString(R.string.msg_success_json_register_new, mPendingJson.length(), key, value), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), getString(R.string.msg_success_json_register_new, mPendingJson.length(), key, value), Toast.LENGTH_SHORT).show();
 
 			return true;
 		} catch (JSONException e)
@@ -523,17 +570,17 @@ public class MessengerFragment extends Fragment
 
 	public boolean toggleMode()
 	{
-		return setMode(!this.mJsonEnabled);
+		return setMode(!mJsonEnabled);
 	}
 
 	public boolean sendMessage()
 	{
-		Editable text = this.mEditText.getText();
+		Editable text = mEditText.getText();
 
 		if (modChecker(text))
 			return true;
 
-		if (this.mJsonEnabled)
+		if (mJsonEnabled)
 		{
 			if (text.toString().length() > 0)
 			{
@@ -542,12 +589,12 @@ public class MessengerFragment extends Fragment
 					return false;
 				}
 			}
-			else if (this.mPendingJson.length() > 0)
+			else if (mPendingJson.length() > 0)
 			{
-				if (!sendMessage(this.mPendingJson.toString()))
+				if (!sendMessage(mPendingJson.toString()))
 					return false;
 
-				this.mPendingJson = new JSONObject();
+				mPendingJson = new JSONObject();
 			}
 
 			updateJsonMenu();
@@ -570,7 +617,11 @@ public class MessengerFragment extends Fragment
 	{
 		try
 		{
-			String serverAddress = this.mEditTextServer.getText().toString();
+			String serverTitle = getServer().getString(MainDatabase.COLUMN_SERVERS_TITLE);
+			String serverAddress = getServer().getString(MainDatabase.COLUMN_SERVERS_ADDRESS);
+
+			final String finalTitle = (getServer().exists(COLUMN_ADDEDCLOSURE) ? getServer().getString(COLUMN_ADDEDCLOSURE) + ", " : "") + serverTitle;
+			final String finalServer = serverAddress;
 
 			String smsModePrefix = "sms:";
 			String httpPrefix = "http://";
@@ -584,8 +635,6 @@ public class MessengerFragment extends Fragment
 			}
 			else if (serverAddress.startsWith(httpPrefix) || serverAddress.startsWith(httpsPrefix))
 			{
-				final String finalServer = serverAddress;
-
 				new Thread()
 				{
 					@Override
@@ -595,18 +644,18 @@ public class MessengerFragment extends Fragment
 						try
 						{
 							RemoteServer server = new RemoteServer(finalServer);
-							addMessageUI(finalServer, server.connect("command", message), true, false);
+							addMessageUI(finalTitle, server.connect("command", message), true, false);
 						} catch (Exception e)
 						{
-							addMessageUI(finalServer, getString(R.string.error_send_message), false, true);
+							addMessageUI(finalTitle, getString(R.string.error_send_message), false, true);
 						}
 					}
 				}.start();
 			}
 			else
-				Messenger.send(serverAddress, Integer.parseInt(this.mEditTextPort.getText().toString()), message, this.mSenderHandler);
+				Messenger.send(finalServer, Integer.parseInt(mEditTextPort.getText().toString()), message, mSenderHandler);
 
-			addMessageUI(serverAddress, message, false, false);
+			addMessageUI(finalTitle, message, false, false);
 
 			return true;
 		} catch (Exception e)
@@ -619,11 +668,11 @@ public class MessengerFragment extends Fragment
 
 	public boolean setMessageBox(String str, boolean checkJson)
 	{
-		if (this.mJsonEnabled && checkJson)
+		if (mJsonEnabled && checkJson)
 		{
 			try
 			{
-				this.mPendingJson = new JSONObject(str);
+				mPendingJson = new JSONObject(str);
 
 				Toast.makeText(getActivity(), getString(R.string.msg_success_json_register, mPendingJson.length()), Toast.LENGTH_SHORT).show();
 				updateJsonMenu();
@@ -634,35 +683,35 @@ public class MessengerFragment extends Fragment
 			}
 		}
 
-		this.mEditText.getText().clear();
-		this.mEditText.getText().append(str);
+		mEditText.getText().clear();
+		mEditText.getText().append(str);
 
 		return true;
 	}
 
 	public boolean setMode(boolean mode)
 	{
-		this.mJsonEnabled = mode;
-		this.mEditText.setHint(this.mJsonEnabled ? getString(R.string.info_mode_json) : getString(R.string.info_mode_text));
+		mJsonEnabled = mode;
+		mEditText.setHint(mJsonEnabled ? getString(R.string.info_mode_json) : getString(R.string.info_mode_text));
 
-		return this.mJsonEnabled;
+		return mJsonEnabled;
 	}
 
 	public void setServerText(String str)
 	{
-		this.mEditTextServer.getText().clear();
-		this.mEditTextServer.getText().append(str);
+		mEditTextServer.getText().clear();
+		mEditTextServer.getText().append(str);
 	}
 
 	public void setPortText(int i)
 	{
-		this.mEditTextPort.getText().clear();
-		this.mEditTextPort.getText().append(String.valueOf(i));
+		mEditTextPort.getText().clear();
+		mEditTextPort.getText().append(String.valueOf(i));
 	}
 
 	public void showToast(final CharSequence charSequence, final int i)
 	{
-		if (getActivity() != null && !this.isDetached())
+		if (getActivity() != null && !isDetached())
 			getActivity().runOnUiThread(new Runnable()
 										{
 											@Override
@@ -676,13 +725,13 @@ public class MessengerFragment extends Fragment
 
 	public void smoothScrollToEnd()
 	{
-		this.mListView.smoothScrollToPosition(this.mAdapter.getCount());
+		mListView.smoothScrollToPosition(mAdapter.getCount());
 	}
 
 	public void updateJsonMenu()
 	{
-		if (this.mJsonMenu != null)
-			this.mJsonMenu.setTitle(getString(R.string.menu_title_json_editor, mPendingJson.length()));
+		if (mJsonMenu != null)
+			mJsonMenu.setTitle(getString(R.string.menu_title_json_editor, mPendingJson.length()));
 	}
 
 	private class Cool extends CoolCommunication
@@ -751,7 +800,7 @@ public class MessengerFragment extends Fragment
 		public void onConfigure(Process process)
 		{
 			super.onConfigure(process);
-			this.mAddress = (InetSocketAddress) process.getSocketAddress();
+			mAddress = (InetSocketAddress) process.getSocketAddress();
 		}
 
 		@Override
@@ -775,7 +824,7 @@ public class MessengerFragment extends Fragment
 
 		public void sendKillSignal()
 		{
-			this.mKillSignal = true;
+			mKillSignal = true;
 		}
 
 		@Override
@@ -783,23 +832,22 @@ public class MessengerFragment extends Fragment
 		{
 			super.run();
 
-			Log.d(this.getClass().getName(), "Started/" + this.getId());
+			Log.d(getClass().getName(), "Started/" + getId());
 
-			while (!this.mKillSignal)
+			while (!mKillSignal)
 			{
 				try
 				{
 					sleep(2000);
 
-					if (MessengerFragment.this.mEditText == null)
+					if (mEditText == null)
 						continue;
 
-					String serverAddress = MessengerFragment.this.mEditTextServer.getText().toString();
+					String serverAddress = getServer().getString(MainDatabase.COLUMN_SERVERS_ADDRESS);
 
 					if (serverAddress.startsWith("http://") || serverAddress.startsWith("https://"))
 					{
 						RemoteServer server = new RemoteServer(serverAddress);
-
 						JSONObject resultIndex = new JSONObject(server.connect(null, null));
 
 						if (resultIndex.length() > 0)
@@ -826,7 +874,7 @@ public class MessengerFragment extends Fragment
 				}
 			}
 
-			Log.d(this.getClass().getName(), "Exiting/" + this.getId());
+			Log.d(getClass().getName(), "Exiting/" + getId());
 		}
 	}
 }

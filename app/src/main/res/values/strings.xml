@@ -49,9 +49,15 @@
     <string name="add_server">Add server</string>
     <string name="edit_server">Edit server</string>
     <string name="error_server_exist">The server you entered is already defined in the list</string>
-    <string name="error_server_empty">Server address can\'t be empty</string>
+    <string name="error_empty_field">All fields has to be filled</string>
     <string name="delete_server">Delete server</string>
     <string name="edit_servers">Edit servers</string>
     <string name="enter_server">enter server…</string>
     <string name="enter_port">enter port…</string>
+    <string name="server_not_actual">This is not an actual server</string>
+    <string name="server_title">Server title</string>
+    <string name="server_address">Server address</string>
+    <string name="server_not_found">Server not found</string>
+    <string name="json_editor_button_edit">Edit</string>
+    <string name="title_json_editor_edit">Edit JSON Index</string>
 </resources>
