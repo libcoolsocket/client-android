@@ -55,7 +55,7 @@ public class ServerActionDialog extends AlertDialog.Builder
 					if (mEditedServerId != 0)
 						db.getWritableDatabase().update(MainDatabase.TABLE_SERVERS, values, MainDatabase.COLUMN_SERVERS_ID + "=?", new String[]{String.valueOf(mEditedServerId)});
 					else if (db.getFirstFromTable(new SQLQuery.Select(MainDatabase.TABLE_SERVERS)
-							.setWhere(MainDatabase.COLUMN_SERVERS_ADDRESS + "=?", addressText.toString())) == null)
+							.setWhere(MainDatabase.COLUMN_SERVERS_TITLE + "=?", titleText.toString())) == null)
 						db.getWritableDatabase().insert(MainDatabase.TABLE_SERVERS, null, values);
 					else
 						Toast.makeText(getContext(), R.string.error_server_exist, Toast.LENGTH_SHORT).show();

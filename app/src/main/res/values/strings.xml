@@ -48,7 +48,7 @@
     <string name="json_editor_button_remove_all">Remove all</string>
     <string name="add_server">Add server</string>
     <string name="edit_server">Edit server</string>
-    <string name="error_server_exist">The server you entered is already defined in the list</string>
+    <string name="error_server_exist">The server name you entered is already used. Enter something different</string>
     <string name="error_empty_field">All fields has to be filled</string>
     <string name="delete_server">Delete server</string>
     <string name="edit_servers">Edit servers</string>
