@@ -69,7 +69,10 @@ public class PairListFragment extends ListFragment
 	{
 		super.onListItemClick(l, v, position, id);
 
-		String title = ((CursorItem) mAdapter.getItem(position)).getString(MainDatabase.COLUMN_SERVERS_TITLE);
+		CursorItem cursorItem = ((CursorItem) mAdapter.getItem(position));
+		boolean isServer = cursorItem.exists(PairListAdapter.COLUMN_EXTRA_FAKE_ITEM);
+
+		String title = cursorItem.getString(isServer ? MainDatabase.COLUMN_SERVERS_ADDRESS : MainDatabase.COLUMN_SERVERS_TITLE);
 
 		if (this.mIsMultiScreen)
 		{

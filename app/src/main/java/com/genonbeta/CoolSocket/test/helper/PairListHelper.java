@@ -2,8 +2,7 @@ package com.genonbeta.CoolSocket.test.helper;
 
 import android.support.v4.util.ArrayMap;
 
-import com.genonbeta.CoolSocket.CoolCommunication;
-import com.genonbeta.CoolSocket.CoolJsonCommunication;
+import com.genonbeta.CoolSocket.CoolSocket;
 import com.genonbeta.core.util.NetworkDeviceScanner;
 import com.genonbeta.core.util.NetworkDeviceScanner.ScannerHandler;
 import com.genonbeta.core.util.NetworkUtils;
@@ -11,8 +10,10 @@ import com.genonbeta.core.util.NetworkUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.util.concurrent.TimeoutException;
 
 public class PairListHelper
 {
@@ -65,26 +66,32 @@ public class PairListHelper
 			deviceInfo.deviceController = NetworkUtils.testSocket(hostAddress, 4632);
 
 			if (deviceInfo.deviceController)
-				CoolJsonCommunication.Messenger.sendOnCurrentThread(hostAddress, 4632, null, new CoolJsonCommunication.JsonResponseHandler()
-						{
-							@Override
-							public void onJsonMessage(Socket socket, CoolCommunication.Messenger.Process process, JSONObject json)
-							{
-								try
-								{
-									json.put("printDeviceName", true);
+				CoolSocket.connect(new CoolSocket.Client.ConnectionHandler()
+				{
+					@Override
+					public void onConnect(CoolSocket.Client client)
+					{
+						try {
+							CoolSocket.ActiveConnection activeConnection = client.connect(new InetSocketAddress(hostAddress, 4632), 10000);
 
-									JSONObject response = new JSONObject(process.waitForResponse());
+							activeConnection.reply(new JSONObject()
+									.put("printDeviceName", true)
+									.toString());
 
-									if (response.has("deviceName"))
-										deviceInfo.deviceName = response.getString("deviceName");
-								} catch (JSONException e)
-								{
-									e.printStackTrace();
-								}
-							}
+							JSONObject response = new JSONObject(activeConnection.receive().response);
+
+							if (response.has("deviceName"))
+								deviceInfo.deviceName = response.getString("deviceName");
+
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (JSONException e) {
+							e.printStackTrace();
+						} catch (TimeoutException e) {
+							e.printStackTrace();
 						}
-				);
+					}
+				}, null);
 		}
 
 		@Override

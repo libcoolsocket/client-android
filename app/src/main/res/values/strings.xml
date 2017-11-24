@@ -60,4 +60,6 @@
     <string name="server_not_found">Server not found</string>
     <string name="json_editor_button_edit">Edit</string>
     <string name="title_json_editor_edit">Edit JSON Index</string>
+    <string name="empty_response">empty response</string>
+    <string name="error_enable_sms_permission">You should permit the app to send SMS in the settings</string>
 </resources>

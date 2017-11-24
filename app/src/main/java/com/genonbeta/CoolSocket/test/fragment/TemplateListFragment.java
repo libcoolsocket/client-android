@@ -153,8 +153,7 @@ public class TemplateListFragment extends ListFragment
 					mDatabase.getWritableDatabase().delete(MainDatabase.TABLE_TEMPLATE,
 							MainDatabase.COLUMN_TEMPLATE_MESSAGE + "=?", new String[] {template});
 				}
-			}
-			if (id == R.id.menu_actionmode_template_edit)
+			} else if (id == R.id.menu_actionmode_template_edit)
 			{
 				new TemplateActionDialog(getActivity(), mAdapter.getDatabase(), mPositive, (String) mCheckedList.toArray()[0]).show();
 			}

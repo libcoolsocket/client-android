@@ -34,6 +34,7 @@ import java.util.Map;
 public class PairListAdapter extends AbstractDatabaseAdapter
 {
 	public static final String COLUMN_EXTRA_AVAILABLESERVICES = "availableServices";
+	public static final String COLUMN_EXTRA_FAKE_ITEM = "fakeItem";
 
 	public PairListAdapter(Context context, SQLiteDatabase db)
 	{
@@ -81,6 +82,8 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 
 				item.put(COLUMN_EXTRA_AVAILABLESERVICES, stringBuilder.toString());
 			}
+
+			item.put(COLUMN_EXTRA_FAKE_ITEM, true);
 
 			getList().add(item);
 		}
