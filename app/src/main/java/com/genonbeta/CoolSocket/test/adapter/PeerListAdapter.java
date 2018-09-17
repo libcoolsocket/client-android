@@ -1,42 +1,26 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.util.Pair;
-import android.support.v4.util.SimpleArrayMap;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
-import com.genonbeta.CoolSocket.test.dialog.ServerActionDialog;
-import com.genonbeta.CoolSocket.test.helper.GAnimater;
-import com.genonbeta.CoolSocket.test.helper.PairListHelper;
-import com.genonbeta.CoolSocket.test.helper.PairListHelper.DeviceInfo;
-import com.genonbeta.CoolSocket.test.helper.PairListHelper.ResultHandler;
+import com.genonbeta.CoolSocket.test.database.adapter.AbstractDatabaseAdapter;
+import com.genonbeta.CoolSocket.test.helper.PeerListHelper;
+import com.genonbeta.CoolSocket.test.helper.PeerListHelper.DeviceInfo;
 import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.SQLQuery;
 import com.genonbeta.android.database.SQLiteDatabase;
-import com.genonbeta.android.database.adapter.AbstractDatabaseAdapter;
-import com.genonbeta.core.content.Intent;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Map;
-
-public class PairListAdapter extends AbstractDatabaseAdapter
+public class PeerListAdapter extends AbstractDatabaseAdapter
 {
 	public static final String COLUMN_EXTRA_AVAILABLESERVICES = "availableServices";
 	public static final String COLUMN_EXTRA_FAKE_ITEM = "fakeItem";
 
-	public PairListAdapter(Context context, SQLiteDatabase db)
+	public PeerListAdapter(Context context, SQLiteDatabase db)
 	{
 		super(context, db, new SQLQuery.Select(MainDatabase.TABLE_SERVERS));
 	}
@@ -54,7 +38,7 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 	@Override
 	public void notifyDataSetChanged()
 	{
-		ArrayMap<String, DeviceInfo> servers = new ArrayMap<>(PairListHelper.getList());
+		ArrayMap<String, DeviceInfo> servers = new ArrayMap<>(PeerListHelper.getList());
 
 		for (String deviceIp : servers.keySet())
 		{
@@ -96,7 +80,7 @@ public class PairListAdapter extends AbstractDatabaseAdapter
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
 		if (view == null)
-			view = getLayoutInflater().inflate(R.layout.list_pair, viewGroup, false);
+			view = getLayoutInflater().inflate(R.layout.list_peer, viewGroup, false);
 
 		CursorItem item = (CursorItem) getItem(position);
 

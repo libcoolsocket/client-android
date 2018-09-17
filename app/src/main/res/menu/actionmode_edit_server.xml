@@ -4,11 +4,11 @@
         android:id="@+id/menu_actionmode_server_edit"
         android:icon="@drawable/ic_mode_edit_white_24dp"
         android:showAsAction="always"
-        android:title="@string/edit_server"/>
+        android:title="@string/butn_editServer"/>
 
     <item
         android:id="@+id/menu_actionmode_server_delete"
         android:icon="@drawable/ic_delete_white_24dp"
         android:showAsAction="always"
-        android:title="@string/delete_server"/>
+        android:title="@string/butn_deleteServer"/>
 </menu>

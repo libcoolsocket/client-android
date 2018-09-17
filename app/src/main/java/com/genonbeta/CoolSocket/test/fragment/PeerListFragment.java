@@ -16,22 +16,22 @@ import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.R;
-import com.genonbeta.CoolSocket.test.adapter.PairListAdapter;
+import com.genonbeta.CoolSocket.test.adapter.PeerListAdapter;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.database.util.QueryLoader;
 import com.genonbeta.CoolSocket.test.dialog.ServerActionDialog;
-import com.genonbeta.CoolSocket.test.helper.PairListHelper;
+import com.genonbeta.CoolSocket.test.helper.PeerListHelper;
 import com.genonbeta.android.database.CursorItem;
-import com.genonbeta.android.database.util.QueryLoader;
 
 import java.net.InetAddress;
 import java.util.HashSet;
 
-public class PairListFragment extends ListFragment
+public class PeerListFragment extends ListFragment
 {
 	private static final int TASK_LOAD = 1;
 
 	private boolean mIsMultiScreen = false;
-	private PairListAdapter mAdapter;
+	private PeerListAdapter mAdapter;
 	private MainDatabase mDatabase;
 	private ChoiceListener mChoiceListener = new ChoiceListener();
 	private DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener()
@@ -49,14 +49,14 @@ public class PairListFragment extends ListFragment
 		super.onActivityCreated(bundle);
 
 		mDatabase = new MainDatabase(getActivity());
-		mAdapter = new PairListAdapter(getActivity(), mDatabase);
+		mAdapter = new PeerListAdapter(getActivity(), mDatabase);
 
 		if (getActivity() instanceof HomeActivity)
 			this.mIsMultiScreen = ((HomeActivity) getActivity()).isMultiscreen();
 
 		setListAdapter(mAdapter);
 		setHasOptionsMenu(true);
-		setEmptyText(getString(R.string.msg_pairlist_no_device));
+		setEmptyText(getString(R.string.mesg_noPeers));
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(this.mChoiceListener);
@@ -70,12 +70,11 @@ public class PairListFragment extends ListFragment
 		super.onListItemClick(l, v, position, id);
 
 		CursorItem cursorItem = ((CursorItem) mAdapter.getItem(position));
-		boolean isServer = cursorItem.exists(PairListAdapter.COLUMN_EXTRA_FAKE_ITEM);
+		boolean isServer = cursorItem.exists(PeerListAdapter.COLUMN_EXTRA_FAKE_ITEM);
 
 		String title = cursorItem.getString(isServer ? MainDatabase.COLUMN_SERVERS_ADDRESS : MainDatabase.COLUMN_SERVERS_TITLE);
 
-		if (this.mIsMultiScreen)
-		{
+		if (this.mIsMultiScreen) {
 			getMessengerFragment().setServerText(title);
 			return;
 		}
@@ -103,12 +102,9 @@ public class PairListFragment extends ListFragment
 	{
 		int id = menuItem.getItemId();
 
-		if (id == R.id.menu_add_server)
-		{
+		if (id == R.id.menu_add_server) {
 			new ServerActionDialog(getContext(), mDatabase, mOnClickListener).show();
-		}
-		else if (id == R.id.menu_scan_peers)
-		{
+		} else if (id == R.id.menu_scan_peers) {
 			updateList();
 			return true;
 		}
@@ -128,33 +124,39 @@ public class PairListFragment extends ListFragment
 
 	private void updateList()
 	{
-		Snackbar.make(getView(),
-				PairListHelper.update(new PairListHelper.ResultHandler()
-				{
-					@Override
-					public void onRunning(InetAddress address)
-					{
-						super.onRunning(address);
-					}
+		Snackbar.make(getView(), PeerListHelper.getScanner().isScannerAvailable()
+				? R.string.mesg_scanStarted
+				: R.string.mesg_cancellingScanProcess, Snackbar.LENGTH_SHORT).show();
 
-					@Override
-					public void onDeviceFound(InetAddress inetAddress)
-					{
-						super.onDeviceFound(inetAddress);
-						refreshList();
-					}
-				}) ? R.string.msg_scan_start : R.string.msg_scan_running, Snackbar.LENGTH_SHORT).show();
+		if (PeerListHelper.getScanner().isScannerAvailable()) {
+			PeerListHelper.update(new PeerListHelper.ResultHandler()
+			{
+				@Override
+				public void onRunning(InetAddress address)
+				{
+					super.onRunning(address);
+				}
+
+				@Override
+				public void onDeviceFound(InetAddress inetAddress)
+				{
+					super.onDeviceFound(inetAddress);
+					refreshList();
+				}
+			});
+		} else
+			PeerListHelper.getScanner().interrupt();
 	}
 
 	private class ChoiceListener implements AbsListView.MultiChoiceModeListener
 	{
-		protected HashSet<Integer> mCheckedList = new HashSet<>();
+		HashSet<Integer> mCheckedList = new HashSet<>();
 		protected MenuItem mMenuItemEdit;
 
 		@Override
 		public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
 		{
-			actionMode.setTitle(R.string.edit_servers);
+			actionMode.setTitle(R.string.butn_editServers);
 
 			new MenuInflater(getContext()).inflate(R.menu.actionmode_edit_server, menu);
 			mMenuItemEdit = menu.findItem(R.id.menu_actionmode_server_edit);
@@ -174,22 +176,17 @@ public class PairListFragment extends ListFragment
 		{
 			int id = menuItem.getItemId();
 
-			if (id == R.id.menu_actionmode_server_delete)
-			{
+			if (id == R.id.menu_actionmode_server_delete) {
 				for (int uniqueId : this.mCheckedList)
 					mDatabase.getWritableDatabase().delete(MainDatabase.TABLE_SERVERS,
 							MainDatabase.COLUMN_SERVERS_ID + "=?", new String[]{String.valueOf(uniqueId)});
-			}
-			else if (id == R.id.menu_actionmode_server_edit)
-			{
+			} else if (id == R.id.menu_actionmode_server_edit) {
 				int editId = (int) mCheckedList.toArray()[0];
 
-				if (editId == 0)
-				{
-					Toast.makeText(getContext(), R.string.server_not_actual, Toast.LENGTH_SHORT).show();
+				if (editId == 0) {
+					Toast.makeText(getContext(), R.string.mesg_notActualServerError, Toast.LENGTH_SHORT).show();
 					return false;
-				}
-				else
+				} else
 					new ServerActionDialog(getActivity(), mAdapter.getDatabase(), mOnClickListener, editId).show();
 			}
 
@@ -211,23 +208,19 @@ public class PairListFragment extends ListFragment
 		{
 			int str = mAdapter.getItemUniqueId(position);
 
-			if (str == 0)
-			{
-				if (isSelected)
-				{
+			if (str == 0) {
+				if (isSelected) {
 					getListView().setItemChecked(position, false);
-					Toast.makeText(getContext(), R.string.server_not_actual, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.mesg_notActualServerError, Toast.LENGTH_SHORT).show();
 				}
-			}
-			else
-			{
+			} else {
 				if (isSelected)
 					mCheckedList.add(str);
 				else
 					mCheckedList.remove(str);
 
 				mMenuItemEdit.setVisible(mCheckedList.size() == 1);
-				actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+				actionMode.setSubtitle(getString(R.string.text_selected, getListView().getCheckedItemCount()));
 			}
 		}
 	}

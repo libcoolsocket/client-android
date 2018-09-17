@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/main_pair_list_fragment"
-        android:name="com.genonbeta.CoolSocket.test.fragment.PairListFragment"
+        android:name="com.genonbeta.CoolSocket.test.fragment.PeerListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginRight="5dp"

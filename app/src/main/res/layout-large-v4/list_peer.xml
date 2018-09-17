@@ -16,25 +16,25 @@
             style="@style/secondaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="15sp"
-            android:textStyle="italic"
-            />
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/list_text"
             style="@style/primaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/list_text3"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@id/list_text3"
+            android:layout_toStartOf="@id/list_text3"
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="16sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

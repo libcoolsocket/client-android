@@ -3,13 +3,11 @@ package com.genonbeta.CoolSocket.test.dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.test.R;
@@ -58,25 +56,25 @@ public class ServerActionDialog extends AlertDialog.Builder
 							.setWhere(MainDatabase.COLUMN_SERVERS_TITLE + "=?", titleText.toString())) == null)
 						db.getWritableDatabase().insert(MainDatabase.TABLE_SERVERS, null, values);
 					else
-						Toast.makeText(getContext(), R.string.error_server_exist, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getContext(), R.string.mesg_serverExistError, Toast.LENGTH_SHORT).show();
 				}
 				else
-					Toast.makeText(getContext(), R.string.error_empty_field, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.mesg_emptyFieldError, Toast.LENGTH_SHORT).show();
 
 				onClickListener.onClick(dialogInterface, i);
 			}
 		};
 
-		setTitle(R.string.add_server);
-		setNegativeButton(R.string.cancel, null);
-		setPositiveButton(R.string.save, positiveListener);
+		setTitle(R.string.butn_addServer);
+		setNegativeButton(R.string.butn_cancel, null);
+		setPositiveButton(R.string.butn_save, positiveListener);
 		setView(view);
 	}
 
 	public ServerActionDialog(Context context, SQLiteDatabase db, DialogInterface.OnClickListener onClickListener, int editedServerId)
 	{
 		this(context, db, onClickListener);
-		setTitle(R.string.edit_server);
+		setTitle(R.string.butn_editServer);
 
 		mEditedServerId = editedServerId;
 
@@ -89,6 +87,6 @@ public class ServerActionDialog extends AlertDialog.Builder
 			mAddressText.getText().append(editedServer.getString(MainDatabase.COLUMN_SERVERS_ADDRESS));
 		}
 		else
-			Toast.makeText(context, R.string.server_not_found, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, R.string.mesg_serverNotFound, Toast.LENGTH_SHORT).show();
 	}
 }

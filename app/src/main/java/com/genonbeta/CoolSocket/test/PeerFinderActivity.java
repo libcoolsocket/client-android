@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class PairFinderActivity extends AppCompatActivity
+public class PeerFinderActivity extends AppCompatActivity
 {
 	@Override
 	protected void onCreate(Bundle bundle)
 	{
 		super.onCreate(bundle);
-		setContentView(R.layout.activity_pairs);
+		setContentView(R.layout.activity_peers);
 
 		if (getSupportActionBar() != null)
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);

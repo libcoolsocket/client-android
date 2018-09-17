@@ -4,11 +4,10 @@
               android:orientation="vertical">
 
     <fragment
-        android:id="@+id/pairs_fragment"
-        android:name="com.genonbeta.CoolSocket.test.fragment.PairListFragment"
+        android:id="@+id/peers_fragment"
+        android:name="com.genonbeta.CoolSocket.test.fragment.PeerListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tag="pairsFragment"
-        />
+        android:tag="peersFragment"/>
 
 </LinearLayout>

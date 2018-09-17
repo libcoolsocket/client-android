@@ -7,10 +7,10 @@ import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.database.adapter.AbstractDatabaseAdapter;
 import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.SQLQuery;
 import com.genonbeta.android.database.SQLiteDatabase;
-import com.genonbeta.android.database.adapter.AbstractDatabaseAdapter;
 
 public class TemplateListAdapter extends AbstractDatabaseAdapter
 {

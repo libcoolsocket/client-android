@@ -1,6 +1,5 @@
 package com.genonbeta.CoolSocket.test.adapter;
 
-import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -10,10 +9,10 @@ import android.widget.TextView;
 
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.database.adapter.AbstractDatabaseAdapter;
 import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.SQLQuery;
 import com.genonbeta.android.database.SQLiteDatabase;
-import com.genonbeta.android.database.adapter.AbstractDatabaseAdapter;
 
 public class MessageListAdapter extends AbstractDatabaseAdapter
 {

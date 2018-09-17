@@ -18,7 +18,7 @@ public class JsonEditorDialog extends Builder
 	{
 		super(context);
 
-		setTitle(R.string.title_json_editor);
+		setTitle(R.string.text_jsonIndexEditor);
 
 		if (jsonObject.length() < 1)
 			setMessage(R.string.msg_json_editor_list_empty);
@@ -35,7 +35,7 @@ public class JsonEditorDialog extends Builder
 					}
 			);
 
-			setPositiveButton(R.string.json_editor_button_edit, new OnClickListener()
+			setPositiveButton(R.string.butn_edit, new OnClickListener()
 			{
 				@Override
 				public void onClick(DialogInterface dialog, int which)
@@ -48,14 +48,14 @@ public class JsonEditorDialog extends Builder
 		if (thirdOption != null)
 			setNeutralButton(thirdOption.getButtonName(), thirdOption);
 
-		setNegativeButton(R.string.close, null);
+		setNegativeButton(R.string.butn_close, null);
 	}
 
 	public JsonEditorDialog(final Context context, final JSONObject jsonObject, final OnEditorClickListener removeListener)
 	{
 		super(context);
 
-		setTitle(R.string.title_json_editor_edit);
+		setTitle(R.string.text_editJsonIndex);
 
 		mAdapter = new JsonObjectAdapter(context, jsonObject);
 
@@ -72,7 +72,7 @@ public class JsonEditorDialog extends Builder
 				}
 		);
 
-		setPositiveButton(R.string.json_editor_button_remove_all, new OnClickListener()
+		setPositiveButton(R.string.butn_removeAll, new OnClickListener()
 				{
 					@Override
 					public void onClick(DialogInterface p1, int p2)
@@ -86,7 +86,7 @@ public class JsonEditorDialog extends Builder
 				}
 		);
 
-		setNegativeButton(R.string.close, null);
+		setNegativeButton(R.string.butn_close, null);
 	}
 
 	public JsonObjectAdapter getJsonAdapter()

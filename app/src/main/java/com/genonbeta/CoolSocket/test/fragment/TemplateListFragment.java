@@ -17,8 +17,8 @@ import com.genonbeta.CoolSocket.test.HomeActivity;
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.adapter.TemplateListAdapter;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.database.util.QueryLoader;
 import com.genonbeta.CoolSocket.test.dialog.TemplateActionDialog;
-import com.genonbeta.android.database.util.QueryLoader;
 
 import java.util.HashSet;
 
@@ -52,7 +52,7 @@ public class TemplateListFragment extends ListFragment
 
 		setListAdapter(this.mAdapter);
 		setHasOptionsMenu(true);
-		setEmptyText(getString(R.string.msg_templatelist_no_template));
+		setEmptyText(getString(R.string.mesg_noTemplate));
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(this.mChoiceListener);
@@ -126,7 +126,7 @@ public class TemplateListFragment extends ListFragment
 		@Override
 		public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
 		{
-			actionMode.setTitle(R.string.edit_templates);
+			actionMode.setTitle(R.string.butn_editTemplates);
 
 			new MenuInflater(getContext()).inflate(R.menu.actionmode_edit_templates, menu);
 			mMenuItemEdit = menu.findItem(R.id.menu_actionmode_template_edit);
@@ -182,7 +182,7 @@ public class TemplateListFragment extends ListFragment
 				mCheckedList.remove(str);
 
 			mMenuItemEdit.setVisible(mCheckedList.size() == 1);
-			actionMode.setSubtitle(getString(R.string.msg_edit_template_selected_count, getListView().getCheckedItemCount()));
+			actionMode.setSubtitle(getString(R.string.text_selected, getListView().getCheckedItemCount()));
 		}
 	}
 }

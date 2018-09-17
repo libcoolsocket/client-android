@@ -53,25 +53,25 @@ public class TemplateActionDialog extends AlertDialog.Builder
 							db.getWritableDatabase().update(MainDatabase.TABLE_TEMPLATE, values, MainDatabase.COLUMN_TEMPLATE_MESSAGE + "=?", new String[]{mEditedTemplate});
 					}
 					else
-						Toast.makeText(getContext(), R.string.error_template_exist, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getContext(), R.string.mesg_templateExistsError, Toast.LENGTH_SHORT).show();
 				}
 				else
-					Toast.makeText(getContext(), R.string.error_template_empty, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.mesg_templateEmptyError, Toast.LENGTH_SHORT).show();
 
 				onClickListener.onClick(dialogInterface, i);
 			}
 		};
 
-		setTitle(R.string.add_template);
-		setNegativeButton(R.string.cancel, null);
-		setPositiveButton(R.string.save, positiveListener);
+		setTitle(R.string.butn_addTemplate);
+		setNegativeButton(R.string.butn_cancel, null);
+		setPositiveButton(R.string.butn_save, positiveListener);
 		setView(view);
 	}
 
 	public TemplateActionDialog(Context context, SQLiteDatabase db, DialogInterface.OnClickListener onClickListener, String editedTemplate)
 	{
 		this(context, db, onClickListener);
-		setTitle(R.string.edit_template);
+		setTitle(R.string.text_editTemplate);
 
 		mEditedTemplate = editedTemplate;
 		mEditText.getText().append(editedTemplate);

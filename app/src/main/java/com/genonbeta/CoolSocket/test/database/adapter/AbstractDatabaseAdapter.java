@@ -1,4 +1,4 @@
-package com.genonbeta.android.database.adapter;
+package com.genonbeta.CoolSocket.test.database.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

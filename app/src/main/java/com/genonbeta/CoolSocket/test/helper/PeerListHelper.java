@@ -15,10 +15,10 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeoutException;
 
-public class PairListHelper
+public class PeerListHelper
 {
-	private static ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<>();
-	private static NetworkDeviceScanner mScanner = new NetworkDeviceScanner();
+	private static final ArrayMap<String, DeviceInfo> mIndex = new ArrayMap<>();
+	private static final NetworkDeviceScanner mScanner = new NetworkDeviceScanner();
 
 	public static ArrayMap<String, DeviceInfo> getList()
 	{
@@ -57,7 +57,7 @@ public class PairListHelper
 			final String hostAddress = inetAddress.getHostAddress();
 			final DeviceInfo deviceInfo = new DeviceInfo();
 
-			PairListHelper.getList().put(hostAddress, deviceInfo);
+			PeerListHelper.getList().put(hostAddress, deviceInfo);
 
 			deviceInfo.isTested = true;
 

@@ -1,12 +1,12 @@
-package com.genonbeta.android.database.util;
+package com.genonbeta.CoolSocket.test.database.util;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
+import com.genonbeta.CoolSocket.test.database.adapter.AbstractDatabaseAdapter;
 import com.genonbeta.android.database.CursorItem;
-import com.genonbeta.android.database.adapter.AbstractDatabaseAdapter;
 
 import java.util.ArrayList;
 

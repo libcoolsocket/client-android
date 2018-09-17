@@ -4,11 +4,11 @@
         android:id="@+id/menu_actionmode_template_edit"
         android:icon="@drawable/ic_mode_edit_white_24dp"
         android:showAsAction="always"
-        android:title="@string/edit_template"/>
+        android:title="@string/text_editTemplate"/>
 
     <item
         android:id="@+id/menu_actionmode_template_delete"
         android:icon="@drawable/ic_delete_white_24dp"
         android:showAsAction="always"
-        android:title="@string/delete_template"/>
+        android:title="@string/butn_deleteTemplates"/>
 </menu>

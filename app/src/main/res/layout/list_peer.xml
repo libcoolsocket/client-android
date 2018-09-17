@@ -12,12 +12,12 @@
         style="@style/secondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:singleLine="true"
         android:textSize="14sp"
-        android:visibility="gone"
-        />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/list_text"
@@ -25,12 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/list_text2"
+        android:layout_toStartOf="@+id/list_text2"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/list_text3"
@@ -38,13 +39,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/list_text"
         android:layout_toLeftOf="@+id/list_text2"
+        android:layout_toStartOf="@+id/list_text2"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="15sp"
-        android:textStyle="italic"
+        android:paddingEnd="2dp"
         android:paddingRight="2dp"
-        />
+        android:singleLine="true"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

@@ -18,7 +18,7 @@
             android:id="@+id/layout_server_action_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_title"
+            android:hint="@string/text_serverTitle"
             android:maxLines="1"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -36,7 +36,7 @@
             android:id="@+id/layout_server_action_address_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_address"/>
+            android:hint="@string/text_serverAddress"/>
 
     </android.support.design.widget.TextInputLayout>
 

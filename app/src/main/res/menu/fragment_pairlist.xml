@@ -5,12 +5,12 @@
     <item
         android:id="@+id/menu_add_server"
         android:icon="@drawable/ic_add_white_24dp"
-        android:title="@string/add_server"
+        android:title="@string/butn_addServer"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/menu_scan_peers"
         android:icon="@drawable/ic_sync_white_24dp"
-        android:title="@string/scan_peers"
+        android:title="@string/butn_scanPeers"
         app:showAsAction="always"/>
 </menu>

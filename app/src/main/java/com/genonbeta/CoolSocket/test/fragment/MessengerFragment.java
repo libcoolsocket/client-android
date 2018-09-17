@@ -14,13 +14,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog.Builder;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -44,16 +42,16 @@ import android.widget.Toast;
 
 import com.genonbeta.CoolSocket.CoolSocket;
 import com.genonbeta.CoolSocket.test.HomeActivity;
-import com.genonbeta.CoolSocket.test.PairFinderActivity;
+import com.genonbeta.CoolSocket.test.PeerFinderActivity;
 import com.genonbeta.CoolSocket.test.R;
 import com.genonbeta.CoolSocket.test.TemplateListActivity;
 import com.genonbeta.CoolSocket.test.adapter.MessageListAdapter;
 import com.genonbeta.CoolSocket.test.database.MainDatabase;
+import com.genonbeta.CoolSocket.test.database.util.QueryLoader;
 import com.genonbeta.CoolSocket.test.dialog.JsonEditorDialog;
 import com.genonbeta.CoolSocket.test.helper.RemoteServer;
 import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.SQLQuery;
-import com.genonbeta.android.database.util.QueryLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,7 +82,6 @@ public class MessengerFragment extends Fragment
 	private Cool mCool = new Cool();
 	private MessageListAdapter mAdapter;
 	private MainDatabase mDatabase;
-	private Button mButton;
 	private EditText mEditText;
 	private EditText mEditTextPort;
 	private EditText mEditTextServer;
@@ -122,16 +119,16 @@ public class MessengerFragment extends Fragment
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle)
+	public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle)
 	{
 		View inflate = layoutInflater.inflate(R.layout.fragment_messenger, viewGroup, false);
+		Button button = inflate.findViewById(R.id.fragment_messenger_send_button);
 
 		mCool.start();
-		mEditText = (EditText) inflate.findViewById(R.id.fragment_messenger_message_text);
-		mEditTextServer = (EditText) inflate.findViewById(R.id.fragment_messenger_server_text);
-		mEditTextPort = (EditText) inflate.findViewById(R.id.fragment_messenger_port_text);
-		mButton = (Button) inflate.findViewById(R.id.fragment_messenger_send_button);
-		mListView = (ListView) inflate.findViewById(R.id.fragment_messenger_listview);
+		mEditText = inflate.findViewById(R.id.fragment_messenger_message_text);
+		mEditTextServer = inflate.findViewById(R.id.fragment_messenger_server_text);
+		mEditTextPort = inflate.findViewById(R.id.fragment_messenger_port_text);
+		mListView = inflate.findViewById(R.id.fragment_messenger_listview);
 		mConnectionFormLayout = inflate.findViewById(R.id.fragment_messenger_form_connection);
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		mDatabase = new MainDatabase(getActivity());
@@ -139,7 +136,7 @@ public class MessengerFragment extends Fragment
 
 		getLoaderManager().initLoader(TASK_LOAD_LIST, bundle, new QueryLoader.DefaultLoaderCallback(mAdapter));
 
-		mButton.setOnClickListener(new View.OnClickListener()
+		button.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View view)
@@ -151,7 +148,7 @@ public class MessengerFragment extends Fragment
 			}
 		});
 
-		mButton.setOnLongClickListener(new OnLongClickListener()
+		button.setOnLongClickListener(new OnLongClickListener()
 		{
 			@Override
 			public boolean onLongClick(View view)
@@ -175,12 +172,16 @@ public class MessengerFragment extends Fragment
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
 			{
-				ClipboardManager cMan = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-				cMan.setPrimaryClip(ClipData.newPlainText("copiedText", mAdapter.getList().get(i).getString(MainDatabase.COLUMN_MESSAGE_MESSAGE)));
+				Object clipboardManager = getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 
-				Toast.makeText(getActivity(), R.string.msg_success_clipboard_copy, Toast.LENGTH_SHORT).show();
+				if (clipboardManager != null) {
+					((ClipboardManager) clipboardManager).setPrimaryClip(ClipData.newPlainText("copiedText", mAdapter.getList().get(i).getString(MainDatabase.COLUMN_MESSAGE_MESSAGE)));
+					Toast.makeText(getActivity(), R.string.mesg_textCopiedToClipboard, Toast.LENGTH_SHORT).show();
 
-				return true;
+					return true;
+				}
+
+				return false;
 			}
 		});
 
@@ -199,14 +200,23 @@ public class MessengerFragment extends Fragment
 
 		mDatabase.getTable(new SQLQuery.Select(MainDatabase.TABLE_MESSAGE));
 		mListView.setAdapter(mAdapter);
+
 		setServerText(mPreferences.getString("lastServer", "0.0.0.0"));
+
 		setMessageBox(mPreferences.getString("lastMessage", ""), false);
+
 		setPortText(mPreferences.getInt("lastPort", 3000));
+
 		setMode(mPreferences.getBoolean("lastSelectedMode", false));
 
-		try {
+		try
+
+		{
 			mPendingJson = new JSONObject(mPreferences.getString("lastJsonIndex", "{}"));
-		} catch (JSONException e) {
+		} catch (
+				JSONException e)
+
+		{
 			mPendingJson = new JSONObject();
 		}
 
@@ -240,20 +250,20 @@ public class MessengerFragment extends Fragment
 		if (id == R.id.menu_about) {
 			StringBuilder stringBuilder = new StringBuilder();
 
-			stringBuilder.append(getString(R.string.msg_about_sentence_one));
+			stringBuilder.append(getString(R.string.text_aboutSentenceFirst));
 			stringBuilder.append("\n\n");
-			stringBuilder.append(getString(R.string.msg_about_sentence_two));
+			stringBuilder.append(getString(R.string.text_aboutSentenceSecond));
 			stringBuilder.append("\n\n");
-			stringBuilder.append(getString(R.string.msg_about_sentence_three));
+			stringBuilder.append(getString(R.string.text_aboutSentenceThird));
 
 			Builder builder = new Builder(getActivity());
 
-			builder.setTitle(R.string.title_about);
+			builder.setTitle(R.string.text_about);
 			builder.setMessage(stringBuilder);
-			builder.setNegativeButton(R.string.close, null);
+			builder.setNegativeButton(R.string.butn_close, null);
 			builder.show();
 		} else if (id == R.id.menu_pair_finder) {
-			startActivityForResult(new Intent(getActivity(), PairFinderActivity.class), REQUEST_CHOOSE_PEER);
+			startActivityForResult(new Intent(getActivity(), PeerFinderActivity.class), REQUEST_CHOOSE_PEER);
 		} else if (id == R.id.menu_template_list) {
 			startActivityForResult(new Intent(getActivity(), TemplateListActivity.class), REQUEST_USE_TEMPLATE);
 		} else if (id == R.id.menu_clear_list) {
@@ -289,7 +299,7 @@ public class MessengerFragment extends Fragment
 				@Override
 				public String getButtonName()
 				{
-					return (mJsonEnabled) ? getString(R.string.title_mode_text) : getString(R.string.title_mode_json);
+					return (mJsonEnabled) ? getString(R.string.butn_textMode) : getString(R.string.butn_jsonMode);
 				}
 			};
 
@@ -457,7 +467,7 @@ public class MessengerFragment extends Fragment
 		int indexOf = text.indexOf(" ");
 
 		if (indexOf == 0 || indexOf + 1 == text.length() || indexOf == -1) {
-			Toast.makeText(getActivity(), R.string.msg_json_apply_format, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.mesg_jsonFormatInfo, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
@@ -473,7 +483,7 @@ public class MessengerFragment extends Fragment
 				mPendingJson.put(key, value);
 			}
 
-			Toast.makeText(getActivity(), getString(R.string.msg_success_json_register_new, mPendingJson.length(), key, value), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), getString(R.string.mesg_jsonRegisteredInfo, mPendingJson.length(), key, value), Toast.LENGTH_SHORT).show();
 
 			return true;
 		} catch (JSONException e) {
@@ -511,7 +521,7 @@ public class MessengerFragment extends Fragment
 						}
 					}
 
-					Toast.makeText(getActivity(), getString(R.string.msg_success_template_load, addCounter), Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), getString(R.string.mesg_templatesLoaded, addCounter), Toast.LENGTH_SHORT).show();
 
 					if (mIsMultiScreen && getFragmentManager().findFragmentById(R.id.main_template_list_fragment) != null) {
 						TemplateListFragment templateListFragment = (TemplateListFragment) getFragmentManager().findFragmentById(R.id.main_template_list_fragment);
@@ -592,11 +602,16 @@ public class MessengerFragment extends Fragment
 					serverAddress = serverAddress.substring(smsModePrefix.length());
 					SmsManager smsManager = SmsManager.getDefault();
 					smsManager.sendTextMessage(serverAddress, null, message, null, null);
+
+					return true;
 				} else {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS))
-						Toast.makeText(getActivity(), R.string.error_enable_sms_permission, Toast.LENGTH_SHORT);
+					if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS)
+							|| ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE))
+						Toast.makeText(getActivity(), R.string.mesg_smsPermissionsError, Toast.LENGTH_SHORT).show();
 					else
-						ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, REQUEST_PERMISSION_ALL);
+						ActivityCompat.requestPermissions(getActivity(),
+								new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE},
+								REQUEST_PERMISSION_ALL);
 				}
 			} else if (serverAddress.startsWith(httpPrefix) || serverAddress.startsWith(httpsPrefix)) {
 				Log.d(TAG, "HTTPS");
@@ -610,7 +625,7 @@ public class MessengerFragment extends Fragment
 							RemoteServer server = new RemoteServer(finalServer);
 							addMessageUI(finalTitle, server.connect("command", message), true, false);
 						} catch (Exception e) {
-							addMessageUI(finalTitle, getString(R.string.error_send_message), false, true);
+							addMessageUI(finalTitle, getString(R.string.mesg_sendMessageError), false, true);
 						}
 					}
 				}.start();
@@ -627,11 +642,11 @@ public class MessengerFragment extends Fragment
 							activeConnection.reply(message);
 							String response = activeConnection.receive().response;
 
-							addMessageUI(finalServer, response != null && response.length() > 0 ? response : getString(R.string.empty_response), true, false);
+							addMessageUI(finalServer, response != null && response.length() > 0 ? response : getString(R.string.text_emtyResponse), true, false);
 						} catch (Exception e) {
 							e.printStackTrace();
-							showToast(getString(R.string.error_send_msg_connection, e), Toast.LENGTH_SHORT);
-							addMessageUI(getString(R.string.error_title_send_msg), "@" + e, false, true);
+							showToast(getString(R.string.mesg_sendMessageConnectionError, e), Toast.LENGTH_SHORT);
+							addMessageUI(getString(R.string.text_failedToSend), "@" + e, false, true);
 						}
 					}
 				});
@@ -640,7 +655,7 @@ public class MessengerFragment extends Fragment
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Toast.makeText(getActivity(), getString(R.string.error_send_message_internal, e.getMessage()), Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), getString(R.string.mesg_sendMessageErrorInternal, e.getMessage()), Toast.LENGTH_LONG).show();
 		}
 
 		return false;
@@ -652,11 +667,11 @@ public class MessengerFragment extends Fragment
 			try {
 				mPendingJson = new JSONObject(str);
 
-				Toast.makeText(getActivity(), getString(R.string.msg_success_json_register, mPendingJson.length()), Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), getString(R.string.mesg_jsonRegistered, mPendingJson.length()), Toast.LENGTH_SHORT).show();
 				updateJsonMenu();
 				return true;
 			} catch (JSONException e) {
-				Toast.makeText(getActivity(), R.string.error_json_parse, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), R.string.mesg_jsonParseError, Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -669,7 +684,7 @@ public class MessengerFragment extends Fragment
 	public boolean setMode(boolean mode)
 	{
 		mJsonEnabled = mode;
-		mEditText.setHint(mJsonEnabled ? getString(R.string.info_mode_json) : getString(R.string.info_mode_text));
+		mEditText.setHint(mJsonEnabled ? getString(R.string.text_enterTextJson) : getString(R.string.text_enterTextNormal));
 
 		return mJsonEnabled;
 	}
@@ -708,7 +723,7 @@ public class MessengerFragment extends Fragment
 	public void updateJsonMenu()
 	{
 		if (mJsonMenu != null)
-			mJsonMenu.setTitle(getString(R.string.menu_title_json_editor, mPendingJson.length()));
+			mJsonMenu.setTitle(getString(R.string.butn_jsonIndex, mPendingJson.length()));
 	}
 
 	private class Cool extends CoolSocket
