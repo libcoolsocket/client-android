@@ -83,7 +83,6 @@
         android:layout_above="@id/fragment_messenger_form_layout"
         android:layout_alignParentTop="true"
         android:divider="@color/colorPrimaryDark"
-        android:stackFromBottom="true"
-        />
+        android:stackFromBottom="true"/>
 
 </RelativeLayout>

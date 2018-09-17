@@ -37,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -95,6 +96,7 @@ public class MessengerFragment extends Fragment
 	private CursorItem mGeneratedAddress = null;
 	private SMSReceiver mSMSReceiver = new SMSReceiver();
 	private RemoteSynchronous mSynchronous = new RemoteSynchronous();
+	private LinearLayout mFormLayout;
 
 	@Override
 	public void onCreate(Bundle bundle)
@@ -125,6 +127,7 @@ public class MessengerFragment extends Fragment
 		Button button = inflate.findViewById(R.id.fragment_messenger_send_button);
 
 		mCool.start();
+		mFormLayout = inflate.findViewById(R.id.fragment_messenger_form_layout);
 		mEditText = inflate.findViewById(R.id.fragment_messenger_message_text);
 		mEditTextServer = inflate.findViewById(R.id.fragment_messenger_server_text);
 		mEditTextPort = inflate.findViewById(R.id.fragment_messenger_port_text);
@@ -411,7 +414,6 @@ public class MessengerFragment extends Fragment
 		Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
 		if (mode) {
-			mConnectionFormLayout.setAnimation(fadeOut);
 			mConnectionFormLayout.setVisibility(View.GONE);
 
 			mEditText.setVisibility(View.VISIBLE);
